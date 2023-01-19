@@ -1,0 +1,18 @@
+.card {
+  @apply p-6 text-left rounded-lg;
+  @apply max-w-[20rem];
+  text-decoration: none;
+  border: 1px solid #eaeaea;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.card:hover,
+.card:focus,
+.card:active {
+  color: #0070f3;
+  border-color: #0070f3;
+}
+
+.card > p {
+  @apply text-gray-700;
+}

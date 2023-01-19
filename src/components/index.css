@@ -1,0 +1,19 @@
+/**
+ * @fileoverview 
+ * COMPONENT STYLES
+ *
+ * This file loads all styles needed to render any of the module components, and
+ * does not include, e.g., the standardized viewport styles (which would alter
+ * the sizing of html, body, ... in any layouts that relied it).
+ */
+
+/**
+ * ❌ DO NOT CHANGE: Load standardized styles that may be relied on by component
+ * styles.
+ */
+@import "@tsmodule/react";
+
+/**
+ * 📝 EXPORT COMPONENT STYLES: Load your component style exports here as needed.
+ */
+@import "./Card/index.css";

@@ -1,0 +1,16 @@
+node_modules
+
+# Potential Firebase / GCP credentials.
+service-account.json
+
+# Emitted output.
+dist/
+.next/
+
+# Incremental TS build info.
+*.tsbuildinfo
+
+.env
+.env.*
+
+yarn-error.log
