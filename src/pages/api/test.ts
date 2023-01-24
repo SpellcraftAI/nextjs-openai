@@ -13,6 +13,7 @@ export default async function test(_: NextApiRequest, res: NextApiResponse) {
     /**
      * Use headers for streaming.
      */
+    status: 200,
     headers: {
       "Content-Type": "text/plain",
       "Transfer-Encoding": "chunked",

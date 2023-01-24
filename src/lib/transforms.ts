@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { CreateCompletionResponse } from "openai";
 
 const ENCODER = new TextEncoder();
@@ -22,6 +23,8 @@ export const ResultsTransform = async function* (chunk: Uint8Array) {
 };
 
 export const TokenTransform = async function* (chunk: Uint8Array) {
+  console.log("TEST");
+  console.log("TokenTransform", DECODER.decode(chunk));
   const message: CreateCompletionResponse = JSON.parse(
     DECODER.decode(chunk)
   );
