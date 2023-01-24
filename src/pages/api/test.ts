@@ -1,21 +1,24 @@
-import { ApiFunction, withEndpoint } from "next-endpoint";
-import { Stream } from "stream";
-import { pipeline } from "stream/promises";
-import { OPENAI } from "../../globs/node";
-
 import type { NextApiRequest, NextApiResponse } from "next";
-import { createCompletion } from "../../lib/createCompletionStream";
+import { createCompletion } from "../../api/createCompletionStream";
 
 export default async function test(_: NextApiRequest, res: NextApiResponse) {
   const stream = await createCompletion({
     model: "text-davinci-003",
     prompt: "Hi, this is just a test.\n\n",
+    temperature: 1,
     max_tokens: 200,
   });
 
+  res.setHeader("Transfer-Encoding", "chunked");
+
   stream.pipe(process.stdout);
   stream.pipe(res);
-
-  // eslint-disable-next-line no-console
-  stream.on("end", () => console.log());
 }
+
+export const config = {
+  // runtime: "edge",
+  api: {
+    bodyParser: false,
+    responseLimit: false,
+  },
+};

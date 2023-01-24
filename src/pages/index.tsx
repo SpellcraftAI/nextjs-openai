@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { DispatchWithoutAction, useEffect, useReducer, useState } from "react";
+import { DispatchWithoutAction, useEffect, useReducer } from "react";
 
 type TextStreamAction = {
   type: "append" | "reset",
@@ -50,6 +50,8 @@ export const useTokenStream = (
         if (done) break;
 
         const text = new TextDecoder("utf-8").decode(value);
+        // eslint-disable-next-line no-console
+        console.log(text);
         dispatch({ type: "append", text });
       }
 
@@ -60,7 +62,7 @@ export const useTokenStream = (
 };
 
 export default function Home() {
-  const [text, refresh] = useTokenStream("http://localhost:3000/api/test");
+  const [text, refresh] = useTokenStream("/api/test");
 
   return (
     <>
