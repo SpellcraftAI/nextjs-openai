@@ -1,8 +1,7 @@
-import { Readable } from "stream";
 import { ResultsTransform, TokenTransform } from "./transforms";
 import { pipeline } from "./utils";
 
-export const ResultStream = (stream: Readable) => {
+export const ResultStream = (stream: ReadableStream) => {
   return pipeline(
     stream,
     ResultsTransform
@@ -13,7 +12,7 @@ export const ResultStream = (stream: Readable) => {
  * Receives a stream of prompt completion objects as JSON, emits a stream of
  * parsed tokens.
  */
-export const TokenStream = (stream: Readable) => {
+export const TokenStream = (stream: ReadableStream) => {
   return pipeline(
     stream,
     ResultsTransform,

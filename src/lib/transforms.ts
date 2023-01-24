@@ -1,7 +1,10 @@
 import { CreateCompletionResponse } from "openai";
 
-export const ResultsTransform = async function* (chunk: Buffer) {
-  const string = chunk.toString("utf-8").trim();
+const ENCODER = new TextEncoder();
+const DECODER = new TextDecoder();
+
+export const ResultsTransform = async function* (chunk: Uint8Array) {
+  const string = DECODER.decode(chunk).trim();
   const results = string.split("data: ");
 
   /**
@@ -14,15 +17,17 @@ export const ResultsTransform = async function* (chunk: Buffer) {
       return;
     }
 
-    yield Buffer.from(result, "utf-8");
+    yield ENCODER.encode(result);
   }
 };
 
-export const TokenTransform = async function* (chunk: Buffer) {
-  const message: CreateCompletionResponse = JSON.parse(chunk.toString("utf-8"));
+export const TokenTransform = async function* (chunk: Uint8Array) {
+  const message: CreateCompletionResponse = JSON.parse(
+    DECODER.decode(chunk)
+  );
 
   const { text } = message?.choices?.[0];
   if (!text) return;
 
-  yield Buffer.from(text, "utf-8");
+  yield ENCODER.encode(text);
 };

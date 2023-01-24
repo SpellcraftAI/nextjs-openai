@@ -1,5 +1,3 @@
-import { Readable, Stream } from "stream";
-
 export type GeneratorFn<Data> =
   (data: Data) => Generator | AsyncGenerator;
 
@@ -24,18 +22,25 @@ export const compose = <Data>(
  * applied in one step.
  */
 export const pipeline = (
-  stream: Readable,
+  stream: ReadableStream,
   ...transforms: GeneratorFn<Buffer>[]
 ) => {
-  const output = new Stream();
   const composed = compose(...transforms);
+  return new ReadableStream({
+    async pull(controller) {
+      const reader = stream.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
 
-  stream.on("end", () => output.emit("end"));
-  stream.on("data", async (chunk: Buffer) => {
-    for await (const result of composed(chunk)) {
-      output.emit("data", result);
+        if (done) {
+          controller.close();
+          break;
+        }
+
+        for await (const result of composed(value)) {
+          controller.enqueue(result);
+        }
+      }
     }
   });
-
-  return output;
 };

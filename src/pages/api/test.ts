@@ -9,14 +9,19 @@ export default async function test(_: NextApiRequest, res: NextApiResponse) {
     max_tokens: 200,
   });
 
-  res.setHeader("Transfer-Encoding", "chunked");
-
-  stream.pipe(process.stdout);
-  stream.pipe(res);
+  return new Response(stream, {
+    /**
+     * Use headers for streaming.
+     */
+    headers: {
+      "Content-Type": "text/plain",
+      "Transfer-Encoding": "chunked",
+    },
+  });
 }
 
 export const config = {
-  // runtime: "edge",
+  runtime: "edge",
   api: {
     bodyParser: false,
     responseLimit: false,
