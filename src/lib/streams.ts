@@ -1,10 +1,10 @@
-import { ResultsTransform, TokenTransform } from "./transforms";
+import { DataTransform, JSONTransform, TokenTransform } from "./transforms";
 import { pipeline } from "./utils";
 
 export const ResultStream = (stream: ReadableStream) => {
   return pipeline(
     stream,
-    ResultsTransform
+    DataTransform
   );
 };
 
@@ -15,7 +15,8 @@ export const ResultStream = (stream: ReadableStream) => {
 export const TokenStream = (stream: ReadableStream) => {
   return pipeline(
     stream,
-    ResultsTransform,
+    DataTransform,
+    JSONTransform,
     TokenTransform
   );
 };

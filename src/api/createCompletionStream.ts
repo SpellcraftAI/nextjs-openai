@@ -1,6 +1,7 @@
 import { OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
 import { ResultStream, TokenStream } from "../lib/streams";
+import { readStream } from "../lib/utils";
 
 export type StreamMode = "raw" | "tokens";
 export type CreateCompletionParams = Parameters<OpenAIApi["createCompletion"]>[0];
@@ -15,40 +16,36 @@ export interface CreateCompletionArgs extends Exclude<CreateCompletionParams, "s
  */
 export const createCompletion = async ({
   mode = "tokens",
+  stream = true,
   ...args
 }: CreateCompletionArgs) => {
-  const completion = await fetch(
+  const response = await fetch(
     "https://api.openai.com/v1/completions",
     {
       method: "POST",
       body: JSON.stringify({
         ...args,
-        stream: true,
+        stream,
       }),
       headers: {
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`
+        "Accept": "application/json",
       },
     }
   );
 
   const completionStream = new ReadableStream({
-    async start(controller) {
-      if (!completion.body || completion.status !== 200) {
+    async pull(controller) {
+      if (!response.ok || !response.body) {
         throw new Error("Completion failed.");
       }
 
-      const reader = completion.body.getReader();
-      while (true) {
-        const { done, value } = await reader.read();
-
-        if (done) {
-          controller.close();
-          break;
-        }
-
-        controller.enqueue(value);
+      for await (const chunk of readStream(response.body)) {
+        controller.enqueue(chunk);
       }
+
+      controller.close();
     }
   });
 
