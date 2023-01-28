@@ -4,14 +4,14 @@ import {
 
 import { CreateCompletionRequest } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
-import { readStream } from "./utils";
+import { OpenAITokenParser } from "./transforms";
+import { pipeline, readStream } from "./utils";
 
-const SSEParserStream = (stream: ReadableStream) => {
+const parseServerSentEvents = (stream: ReadableStream) => {
   const ENCODER = new TextEncoder();
   const DECODER = new TextDecoder();
-  let counter = 0;
 
-  return new ReadableStream({
+  return new ReadableStream<Uint8Array>({
     async start(controller) {
       const parser = createParser((event) => {
         if (event.type === "event") {
@@ -23,15 +23,8 @@ const SSEParserStream = (stream: ReadableStream) => {
           }
 
           try {
-            const json = JSON.parse(data);
-            const text = json.choices[0].text;
-            if (counter < 2 && (text.match(/\n/) || []).length) {
-              return;
-            }
-
-            const queue = ENCODER.encode(text);
-            controller.enqueue(queue);
-            counter++;
+            JSON.parse(data);
+            controller.enqueue(ENCODER.encode(data));
           } catch (e) {
             controller.error(e);
           }
@@ -62,5 +55,8 @@ export async function OpenAIStream(config: CreateCompletionRequest) {
     throw new Error("No response body");
   }
 
-  return SSEParserStream(res.body);
+  return pipeline(
+    parseServerSentEvents(res.body),
+    [OpenAITokenParser]
+  );
 }
