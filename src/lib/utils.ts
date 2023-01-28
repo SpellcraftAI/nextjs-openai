@@ -26,15 +26,13 @@ export const compose = <Data>(
  */
 export const pipeline = <D = Uint8Array>(
   stream: ReadableStream<D>,
-  ...transforms: GeneratorFn<D>[]
+  transforms: GeneratorFn<D>[],
 ) => {
   const composed = compose(...transforms);
-  return readGenerator(
+  return generateStream(
     async function* () {
-      for await (const result of readStream(stream)) {
-        for await (const chunk of composed(result)) {
-          yield chunk;
-        }
+      for await (const chunk of readStream(stream)) {
+        yield* composed(chunk);
       }
     }
   );
@@ -55,16 +53,23 @@ export const readStream = async function* <D = Uint8Array>(
   }
 };
 
-export const readGenerator = <Data = Uint8Array>(
-  G: StreamGenerator<Data>
+export const generateStream = <T, TReturn>(
+  G: (
+    Generator<T, TReturn> |
+    AsyncGenerator<T, TReturn> |
+    (() => AsyncGenerator<T, TReturn>) |
+    (() => Generator<T, TReturn>)
+  )
 ) => {
-  return new ReadableStream<Data>({
-    async pull(controller) {
-      for await (const chunk of G()) {
+  const generator = typeof G === "function" ? G() : G;
+
+  return new ReadableStream({
+    async start(controller) {
+      for await (const chunk of generator) {
         controller.enqueue(chunk);
       }
 
       controller.close();
-    }
+    },
   });
 };

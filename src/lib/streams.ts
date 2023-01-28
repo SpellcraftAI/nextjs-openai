@@ -1,10 +1,13 @@
-import { DataTransform, JSONTransform, TokenTransform } from "./transforms";
+import { OpenAITokenParser, PartialJsonParser, SSEParser } from "./transforms";
 import { pipeline } from "./utils";
 
 export const ResultStream = (stream: ReadableStream) => {
   return pipeline(
     stream,
-    DataTransform
+    [
+      SSEParser,
+      PartialJsonParser,
+    ]
   );
 };
 
@@ -15,8 +18,10 @@ export const ResultStream = (stream: ReadableStream) => {
 export const TokenStream = (stream: ReadableStream) => {
   return pipeline(
     stream,
-    DataTransform,
-    JSONTransform,
-    TokenTransform
+    [
+      SSEParser,
+      PartialJsonParser,
+      OpenAITokenParser
+    ]
   );
 };

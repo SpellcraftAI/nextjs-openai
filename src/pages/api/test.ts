@@ -1,14 +1,14 @@
 import { createCompletion } from "../../api/createCompletionStream";
 
 export default async function test() {
-  const stream = await createCompletion({
+  const completionsStream = await createCompletion({
     model: "text-davinci-003",
     prompt: "Hi, this is just a test.\n\n",
     temperature: 1,
     max_tokens: 200,
   });
 
-  return new Response(stream, {
+  return new Response(completionsStream, {
     /**
      * Use headers for streaming.
      */
