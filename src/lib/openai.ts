@@ -1,42 +1,8 @@
-import {
-  createParser,
-} from "eventsource-parser";
-
 import { CreateCompletionRequest } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
+import { OpenAIServerSentEvents } from "./streams";
 import { OpenAITokenParser } from "./transforms";
-import { pipeline, readStream } from "./utils";
-
-const parseServerSentEvents = (stream: ReadableStream) => {
-  const ENCODER = new TextEncoder();
-  const DECODER = new TextDecoder();
-
-  return new ReadableStream<Uint8Array>({
-    async start(controller) {
-      const parser = createParser((event) => {
-        if (event.type === "event") {
-          const { data } = event;
-
-          if (data === "[DONE]") {
-            controller.close();
-            return;
-          }
-
-          try {
-            JSON.parse(data);
-            controller.enqueue(ENCODER.encode(data));
-          } catch (e) {
-            controller.error(e);
-          }
-        }
-      });
-
-      for await (const chunk of readStream(stream)) {
-        parser.feed(DECODER.decode(chunk));
-      }
-    },
-  });
-};
+import { pipeline } from "./utils";
 
 export async function OpenAIStream(config: CreateCompletionRequest) {
   const res = await fetch("https://api.openai.com/v1/completions", {
@@ -56,7 +22,7 @@ export async function OpenAIStream(config: CreateCompletionRequest) {
   }
 
   return pipeline(
-    parseServerSentEvents(res.body),
+    OpenAIServerSentEvents(res.body),
     [OpenAITokenParser]
   );
 }

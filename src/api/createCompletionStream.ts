@@ -1,6 +1,6 @@
 import { OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
-import { ResultStream, TokenStream } from "../lib/streams";
+import { OpenAIServerSentEvents, TokenStream } from "../lib/streams";
 // import { readStream } from "../lib/utils";
 
 export type StreamMode = "raw" | "tokens";
@@ -41,7 +41,7 @@ export const createCompletion = async ({
 
   switch (mode) {
     case "raw":
-      return ResultStream(response.body);
+      return OpenAIServerSentEvents(response.body);
     case "tokens":
       return TokenStream(response.body);
     default:
