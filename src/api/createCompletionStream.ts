@@ -1,6 +1,6 @@
 import { OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
-import { OpenAIServerSentEvents, TokenStream } from "../lib/streams";
+import { OpenAIEventStream, OpenAITokenStream } from "../lib/streams";
 // import { readStream } from "../lib/utils";
 
 export type StreamMode = "raw" | "tokens";
@@ -16,7 +16,6 @@ export interface CreateCompletionArgs extends Exclude<CreateCompletionParams, "s
  */
 export const createCompletion = async ({
   mode = "tokens",
-  stream = true,
   ...args
 }: CreateCompletionArgs) => {
   const response = await fetch(
@@ -25,7 +24,7 @@ export const createCompletion = async ({
       method: "POST",
       body: JSON.stringify({
         ...args,
-        stream,
+        stream: true,
       }),
       headers: {
         Authorization: `Bearer ${OPENAI_API_KEY}`,
@@ -41,9 +40,9 @@ export const createCompletion = async ({
 
   switch (mode) {
     case "raw":
-      return OpenAIServerSentEvents(response.body);
+      return OpenAIEventStream(response.body);
     case "tokens":
-      return TokenStream(response.body);
+      return OpenAITokenStream(response.body);
     default:
       throw new Error(`Invalid mode: ${mode}`);
   }

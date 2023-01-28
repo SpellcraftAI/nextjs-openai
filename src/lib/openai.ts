@@ -1,6 +1,6 @@
 import { CreateCompletionRequest } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
-import { OpenAIServerSentEvents } from "./streams";
+import { OpenAIEventStream } from "./streams";
 import { OpenAITokenParser } from "./transforms";
 import { pipeline } from "./utils";
 
@@ -22,7 +22,7 @@ export async function OpenAIStream(config: CreateCompletionRequest) {
   }
 
   return pipeline(
-    OpenAIServerSentEvents(res.body),
+    OpenAIEventStream(res.body),
     [OpenAITokenParser]
   );
 }
