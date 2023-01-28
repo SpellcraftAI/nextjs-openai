@@ -1,7 +1,6 @@
 import { CreateCompletionRequest, CreateEditRequest, CreateEmbeddingRequest, CreateFineTuneRequest, CreateImageRequest } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
-import { OpenAIEventStream, OpenAITokenStream } from "../lib/streams";
-// import { readStream } from "../lib/utils";
+import { EventStream, TokenStream } from "../lib/streams";
 
 export type StreamMode = "raw" | "tokens";
 
@@ -27,16 +26,21 @@ Exclude<
 export type CreateArgs =
   OpenAICreateArgs  & { mode?: StreamMode };
 
+export type Create = (
+  endpoint: OpenAIAPIEndpoint,
+  args: CreateArgs
+) => Promise<ReadableStream<Uint8Array>>;
+
 /**
  * Create a new completion stream. Stream of strings by default, set `mode:
  * 'raw'` for the raw stream of JSON objects.
  */
-export const create = async (
-  endpoint: OpenAIAPIEndpoint,
+export const create: Create = async (
+  endpoint,
   {
     mode = "tokens",
     ...args
-  }: CreateArgs
+  }
 ) => {
   const response = await fetch(
     `https://api.openai.com/v1/${endpoint}`,
@@ -60,9 +64,9 @@ export const create = async (
 
   switch (mode) {
     case "raw":
-      return OpenAIEventStream(response.body);
+      return EventStream(response.body);
     case "tokens":
-      return OpenAITokenStream(response.body);
+      return TokenStream(response.body);
     default:
       throw new Error(`Invalid mode: ${mode}`);
   }

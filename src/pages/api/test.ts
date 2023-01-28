@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { create } from "../../api/createCompletionStream";
+import { create } from "../../api/create";
 // import { OpenAIStream } from "../../lib/openai";
 
 export default async function test() {

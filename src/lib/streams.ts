@@ -5,7 +5,7 @@ import { pipeline, readStream } from "./utils";
 export type OpenAIStream =
   (stream: ReadableStream<Uint8Array>) => ReadableStream<Uint8Array>;
 
-export const OpenAIEventStream: OpenAIStream = (stream) => {
+export const EventStream: OpenAIStream = (stream) => {
   const ENCODER = new TextEncoder();
   const DECODER = new TextDecoder();
 
@@ -40,9 +40,9 @@ export const OpenAIEventStream: OpenAIStream = (stream) => {
  * Receives a stream of prompt completion objects as JSON, emits a stream of
  * parsed tokens.
  */
-export const OpenAITokenStream: OpenAIStream = (stream) => {
+export const TokenStream: OpenAIStream = (stream) => {
   return pipeline(
-    OpenAIEventStream(stream),
-    [OpenAITokenParser]
+    EventStream(stream),
+    OpenAITokenParser
   );
 };

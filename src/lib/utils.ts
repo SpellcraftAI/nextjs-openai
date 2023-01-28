@@ -21,15 +21,14 @@ export const compose = <Data>(
 };
 
 /**
- * Create an http-server-compatible stream pipeline. Transforms are composed and
- * applied in one step.
+ * Runs each chunk through all of the given transforms.
  */
 export const pipeline = <D = Uint8Array>(
   stream: ReadableStream<D>,
-  transforms: GeneratorFn<D>[],
+  ...transforms: GeneratorFn<D>[]
 ) => {
   const composed = compose(...transforms);
-  return generateStream(
+  return createStream(
     async function* () {
       for await (const chunk of readStream(stream)) {
         yield* composed(chunk);
@@ -38,6 +37,9 @@ export const pipeline = <D = Uint8Array>(
   );
 };
 
+/**
+ * Iterates over a stream, yielding each chunk.
+ */
 export const readStream = async function* <D = Uint8Array>(
   stream: ReadableStream<D>
 ) {
@@ -53,19 +55,19 @@ export const readStream = async function* <D = Uint8Array>(
   }
 };
 
-export const generateStream = <T, TReturn>(
+/**
+ * Creates a ReadableStream from a generator function.
+ */
+export const createStream = <T, TReturn, D>(
   G: (
-    Generator<T, TReturn> |
-    AsyncGenerator<T, TReturn> |
-    (() => AsyncGenerator<T, TReturn>) |
-    (() => Generator<T, TReturn>)
-  )
+    ((data?: D) => AsyncGenerator<T, TReturn>) |
+    ((data?: D) => Generator<T, TReturn>)
+  ),
+  data?: D
 ) => {
-  const generator = typeof G === "function" ? G() : G;
-
   return new ReadableStream({
     async start(controller) {
-      for await (const chunk of generator) {
+      for await (const chunk of G(data)) {
         controller.enqueue(chunk);
       }
 
