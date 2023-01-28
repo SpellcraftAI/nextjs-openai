@@ -16,6 +16,8 @@ export const PartialJsonParser: Transform = async function* (bytes) {
 
   const string = DECODER.decode(bytes);
   JSON_MEMORY += string;
+  // eslint-disable-next-line no-console
+  console.log({ JSON_MEMORY });
 
   try {
     JSON.parse(JSON_MEMORY);
