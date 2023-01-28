@@ -11,6 +11,8 @@ export const SSEParser: Transform = async function* (chunk) {
 
   const string = DECODER.decode(chunk);
   const sseChunks = string.split("\n\n").filter(Boolean);
+  // eslint-disable-next-line no-console
+  console.log({ sseChunks });
 
   for (const sseChunk of sseChunks) {
     if (!sseChunk) continue;
