@@ -10,8 +10,12 @@ export const SSEParser: Transform = async function* (chunk) {
 
   yield new Promise<Uint8Array>((resolve) => {
     const parser = createParser((event) => {
-      if ("data" in event) {
-        resolve(ENCODER.encode(event.data));
+      // eslint-disable-next-line no-console
+      console.log(event);
+      if (event.type === "event") {
+        const { data } = event;
+        if (data === "[DONE]") return;
+        resolve(ENCODER.encode(data));
       }
     });
 
