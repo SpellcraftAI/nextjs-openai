@@ -1,10 +1,13 @@
 import { createParser } from "eventsource-parser";
-import { OpenAITokenParser } from "./transforms";
+import { TokenParser } from "./transforms";
 import { pipeline, readStream } from "./utils";
 
 export type OpenAIStream =
   (stream: ReadableStream<Uint8Array>) => ReadableStream<Uint8Array>;
 
+/**
+ * A `ReadableStream` of server sent events from the given OpenAI API stream.
+ */
 export const EventStream: OpenAIStream = (stream) => {
   const ENCODER = new TextEncoder();
   const DECODER = new TextDecoder();
@@ -37,12 +40,11 @@ export const EventStream: OpenAIStream = (stream) => {
 };
 
 /**
- * Receives a stream of prompt completion objects as JSON, emits a stream of
- * parsed tokens.
+ * A `ReadableStream` of parsed tokens from the given OpenAI API stream.
  */
 export const TokenStream: OpenAIStream = (stream) => {
   return pipeline(
     EventStream(stream),
-    OpenAITokenParser
+    TokenParser
   );
 };

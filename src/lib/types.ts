@@ -21,7 +21,7 @@ Exclude<
 "stream"
 >;
 
-export type Create = (
+export type OpenAIStream = (
   endpoint: OpenAIAPIEndpoint,
   args: OpenAICreateArgs,
   mode?: StreamMode

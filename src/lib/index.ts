@@ -1,12 +1,12 @@
 import { OPENAI_API_KEY } from "../globs/node";
 import { EventStream, TokenStream } from "./streams";
-import { Create } from "./types";
+import { OpenAIStream } from "./types";
 
 /**
  * Create a new completion stream. Stream of strings by default, set `mode:
  * 'raw'` for the raw stream of JSON objects.
  */
-export const OpenAI: Create = async (
+export const OpenAI: OpenAIStream = async (
   endpoint,
   {
     ...args
