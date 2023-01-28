@@ -8,24 +8,12 @@ import { CreateCompletionRequest } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
 import { readStream } from "./utils";
 
-export async function OpenAIStream(config: CreateCompletionRequest) {
+const SSEParserStream = (stream: ReadableStream) => {
   const ENCODER = new TextEncoder();
   const DECODER = new TextDecoder();
-
-  const res = await fetch("https://api.openai.com/v1/completions", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENAI_API_KEY ?? ""}`,
-    },
-    method: "POST",
-    body: JSON.stringify({
-      ...config,
-      stream: true,
-    }),
-  });
-
   let counter = 0;
-  const stream = new ReadableStream({
+
+  return new ReadableStream({
     async start(controller) {
       const parser = createParser((event) => {
         if (event.type === "event") {
@@ -52,15 +40,29 @@ export async function OpenAIStream(config: CreateCompletionRequest) {
         }
       });
 
-      if (!res.body) {
-        throw new Error("No response body");
-      }
-
-      for await (const chunk of readStream(res.body)) {
+      for await (const chunk of readStream(stream)) {
         parser.feed(DECODER.decode(chunk));
       }
     },
   });
+};
 
-  return stream;
+export async function OpenAIStream(config: CreateCompletionRequest) {
+  const res = await fetch("https://api.openai.com/v1/completions", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_API_KEY ?? ""}`,
+    },
+    method: "POST",
+    body: JSON.stringify({
+      ...config,
+      stream: true,
+    }),
+  });
+
+  if (!res.body) {
+    throw new Error("No response body");
+  }
+
+  return SSEParserStream(res.body);
 }
