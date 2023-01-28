@@ -1,7 +1,7 @@
 import { OpenAIApi } from "openai";
 import { OPENAI_API_KEY } from "../globs/node";
 import { ResultStream, TokenStream } from "../lib/streams";
-import { readStream } from "../lib/utils";
+// import { readStream } from "../lib/utils";
 
 export type StreamMode = "raw" | "tokens";
 export type CreateCompletionParams = Parameters<OpenAIApi["createCompletion"]>[0];
@@ -35,25 +35,15 @@ export const createCompletion = async ({
     }
   );
 
-  const completionStream = new ReadableStream({
-    async pull(controller) {
-      if (!response.ok || !response.body) {
-        throw new Error("Completion failed.");
-      }
-
-      for await (const chunk of readStream(response.body)) {
-        controller.enqueue(chunk);
-      }
-
-      controller.close();
-    }
-  });
+  if (!response.body) {
+    throw new Error("No response body");
+  }
 
   switch (mode) {
     case "raw":
-      return ResultStream(completionStream);
+      return ResultStream(response.body);
     case "tokens":
-      return TokenStream(completionStream);
+      return TokenStream(response.body);
     default:
       throw new Error(`Invalid mode: ${mode}`);
   }
