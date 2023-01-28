@@ -5,12 +5,16 @@ export const OpenAITokenParser: Transform = async function* (chunk) {
   const ENCODER = new TextEncoder();
   const DECODER = new TextDecoder();
 
-  const message: CreateCompletionResponse = JSON.parse(
-    DECODER.decode(chunk)
-  );
+  const decoded = DECODER.decode(chunk);
+  if (decoded === "[DONE]") {
+    return;
+  }
 
+  const message: CreateCompletionResponse = JSON.parse(decoded);
   const { text } = message?.choices?.[0];
-  if (!text) return;
+  if (!text) {
+    return;
+  }
 
   yield ENCODER.encode(text);
 };

@@ -20,7 +20,7 @@ export const TokenStream = (stream: ReadableStream) => {
     stream,
     [
       SSEParser,
-      PartialJsonParser,
+      // PartialJsonParser,
       OpenAITokenParser
     ]
   );
