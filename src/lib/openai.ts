@@ -1,7 +1,5 @@
 import {
   createParser,
-  ParsedEvent,
-  ReconnectInterval,
 } from "eventsource-parser";
 
 import { CreateCompletionRequest } from "openai";
