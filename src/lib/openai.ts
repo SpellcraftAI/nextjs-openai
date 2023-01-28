@@ -19,7 +19,10 @@ export async function OpenAIStream(config: CreateCompletionRequest) {
       Authorization: `Bearer ${OPENAI_API_KEY ?? ""}`,
     },
     method: "POST",
-    body: JSON.stringify(config),
+    body: JSON.stringify({
+      ...config,
+      stream: true,
+    }),
   });
 
   const stream = new ReadableStream({

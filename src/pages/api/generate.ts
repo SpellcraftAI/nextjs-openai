@@ -2,10 +2,6 @@ import type { NextRequest } from "next/server";
 import { CreateCompletionRequest } from "openai";
 import { OpenAIStream } from "../../lib/openai";
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error("Missing env var from OpenAI");
-}
-
 export const config = {
   runtime: "edge",
 };

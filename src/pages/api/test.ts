@@ -9,8 +9,6 @@ export default async function test() {
     max_tokens: 200,
   });
 
-  console.log({ completionsStream });
-
   return new Response(completionsStream);
 }
 

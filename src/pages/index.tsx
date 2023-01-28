@@ -62,9 +62,7 @@ export const useTokenStream = (
 };
 
 export default function Home() {
-  const [text, refresh] = useTokenStream(`/api/generate?${new URLSearchParams({
-    prompt: "Hello! This is just a test.\n\n",
-  })}`);
+  const [text, refresh] = useTokenStream("/api/test");
 
   return (
     <>
