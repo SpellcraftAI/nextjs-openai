@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import { createCompletion } from "../../api/createCompletionStream";
-// import { OpenAIStream } from "../../lib/openai";
+import { OpenAIStream } from "../../lib/openai";
 
 export default async function test() {
-  const completionsStream = await createCompletion({
+  const completionsStream = await OpenAIStream({
     model: "text-davinci-003",
     prompt: "Hi, this is just a test.\n\n",
     temperature: 1,
