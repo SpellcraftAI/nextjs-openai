@@ -17,6 +17,8 @@ export const SSEParser: Transform = async function* (chunk) {
     if (!sseChunk.startsWith(SSE_DATA_PREFIX)) continue;
 
     const data = sseChunk.slice(SSE_DATA_PREFIX.length);
+    // eslint-disable-next-line no-console
+    console.log({ data });
     if (data === "[DONE]") {
       return;
     }
