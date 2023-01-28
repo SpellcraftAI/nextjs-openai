@@ -1,28 +1,6 @@
 import Head from "next/head";
-import { DispatchWithoutAction, useEffect, useReducer } from "react";
-
-type TextStreamAction = {
-  type: "append" | "reset",
-  text: string,
-};
-
-function textStreamReducer(
-  text: string,
-  action: TextStreamAction
-) {
-  switch (action.type) {
-    case "append":
-      text += action.text;
-      break;
-    case "reset":
-      text = action.text;
-      break;
-    default:
-      throw new Error();
-  }
-
-  return text;
-}
+import { DispatchWithoutAction, useEffect, useReducer, useState } from "react";
+import { readStream } from "../lib/utils";
 
 /**
  * Custom hook that returns a string with the current text of the token stream.
@@ -30,31 +8,24 @@ function textStreamReducer(
 export const useTokenStream = (
   url: string
 ): [string, DispatchWithoutAction] => {
-  const [text, dispatch] = useReducer(textStreamReducer, "");
+  const [text, setText] = useState("");
   const [refreshCount, refresh] = useReducer(x => x + 1, 0);
 
   useEffect(() => {
     if (refreshCount) {
-      dispatch({ type: "reset", text: "" });
+      setText("");
     }
   }, [refreshCount]);
 
   useEffect(() => {
     (async () => {
       const response = await fetch(url);
-      if (!response?.body) return;
+      if (!response.body) return;
 
-      const reader = response.body.getReader();
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const text = new TextDecoder("utf-8").decode(value);
-        // eslint-disable-next-line no-console
-        console.log(text);
-        dispatch({ type: "append", text });
+      for await (const chunk of readStream(response.body)) {
+        const text = new TextDecoder().decode(chunk);
+        setText((prev) => prev + text);
       }
-
     })();
   }, [url, refreshCount]);
 
