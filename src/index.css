@@ -14,7 +14,4 @@
 @import "tailwindcss/utilities";
 @import "tailwindcss/components";
 
-/**
- * Load this module's component styles.
- */
-@import "./components/index.css";
+@import "@tsmodule/react";

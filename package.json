@@ -2,14 +2,9 @@
   "name": "nextjs-openai",
   "version": "0.0.1",
   "license": "MIT",
-  "platform": "browser",
-  "style": "dist/bundle.css",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./dist/index.js",
-    "./*": "./dist/components/*/index.js",
-    "./styles": "./dist/bundle.css",
-    "./styles/*": "./dist/components/*/index.css"
+    ".": "./dist/index.js"
   },
   "scripts": {
     "export": "tsmodule build",
@@ -42,7 +37,6 @@
   },
   "dependencies": {
     "eventsource-parser": "^0.0.5",
-    "next-endpoint": "^5.1.5",
     "openai": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
