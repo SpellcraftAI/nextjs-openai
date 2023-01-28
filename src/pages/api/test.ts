@@ -1,22 +1,17 @@
-import { createCompletion } from "../../api/createCompletionStream";
+/* eslint-disable no-console */
+import { OpenAIStream } from "../../lib/openai";
 
 export default async function test() {
-  const completionsStream = await createCompletion({
+  const completionsStream = await OpenAIStream({
     model: "text-davinci-003",
     prompt: "Hi, this is just a test.\n\n",
     temperature: 1,
     max_tokens: 200,
   });
 
-  return new Response(completionsStream, {
-    /**
-     * Use headers for streaming.
-     */
-    status: 200,
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-    },
-  });
+  console.log({ completionsStream });
+
+  return new Response(completionsStream);
 }
 
 export const config = {
