@@ -1,4 +1,5 @@
 import { DispatchWithoutAction, useEffect, useReducer, useState } from "react";
+import { DECODER } from "../globs/shared";
 import { readStream } from "../lib/utils";
 
 /**
@@ -19,10 +20,12 @@ export const useTokenStream = (
   useEffect(() => {
     (async () => {
       const response = await fetch(url);
-      if (!response.body) return;
+      if (!response.body) {
+        throw new Error(`Failed to load response from URL: ${url}`);
+      }
 
       for await (const chunk of readStream(response.body)) {
-        const text = new TextDecoder().decode(chunk);
+        const text = DECODER.decode(chunk);
         setText((prev) => prev + text);
       }
     })();

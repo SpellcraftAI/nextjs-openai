@@ -1,6 +1,7 @@
-import { createParser } from "eventsource-parser";
-import { TokenParser } from "./transforms";
+import { ENCODER, DECODER } from "../globs/shared";
 import { pipeline, readStream } from "./utils";
+import { TokenParser } from "./transforms";
+import { createParser } from "eventsource-parser";
 
 export type OpenAIStream =
   (stream: ReadableStream<Uint8Array>) => ReadableStream<Uint8Array>;
@@ -9,9 +10,6 @@ export type OpenAIStream =
  * A `ReadableStream` of server sent events from the given OpenAI API stream.
  */
 export const EventStream: OpenAIStream = (stream) => {
-  const ENCODER = new TextEncoder();
-  const DECODER = new TextDecoder();
-
   return new ReadableStream<Uint8Array>({
     async start(controller) {
       const parser = createParser((event) => {

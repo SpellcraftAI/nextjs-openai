@@ -1,3 +1,5 @@
+import { ENCODER, DECODER } from "../globs/shared";
+
 export type Transform = (chunk: Uint8Array) => AsyncGenerator<Uint8Array>;
 
 /**
@@ -5,9 +7,6 @@ export type Transform = (chunk: Uint8Array) => AsyncGenerator<Uint8Array>;
  * and yields the text of the first choice.
  */
 export const TokenParser: Transform = async function* (chunk) {
-  const ENCODER = new TextEncoder();
-  const DECODER = new TextDecoder();
-
   const decoded = DECODER.decode(chunk);
   const message = JSON.parse(decoded);
 
