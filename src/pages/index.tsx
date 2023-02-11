@@ -22,6 +22,8 @@ export default function Home() {
         </div>
         <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
           <TextStreamView url="/api/demo" />
+          {/* <TestStreamTest url="/api/demo" /> */}
+          {/* <TestStreamTest url="/api/demo" /> */}
         </div>
       </main>
     </>

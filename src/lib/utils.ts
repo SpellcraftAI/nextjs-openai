@@ -1,15 +1,15 @@
-export type GeneratorFn<Data> =
-  (data: Data) => Generator<Data> | AsyncGenerator<Data>;
+export type GeneratorFn<T> =
+  (data: T) => Generator<T> | AsyncGenerator<T>;
 
-export type StreamGenerator<Data = Uint8Array> =
-  () => Generator<Data> | AsyncGenerator<Data>;
+export type StreamGenerator<T> =
+  () => Generator<T> | AsyncGenerator<T>;
 
 /**
  * `compose(f, g, h, ...)` returns a generator function `G(data)` that yields
  * all `(f · g · h · ...)(data)`.
  */
-export const compose = <Data>(
-  ...generators: GeneratorFn<Data>[]
+export const compose = <T>(
+  ...generators: GeneratorFn<T>[]
 ) => {
   return generators.reduce(
     (prev, next) => async function* (data) {
@@ -23,9 +23,9 @@ export const compose = <Data>(
 /**
  * Runs each chunk through all of the given transforms.
  */
-export const pipeline = <D = Uint8Array>(
-  stream: ReadableStream<D>,
-  ...transforms: GeneratorFn<D>[]
+export const pipeline = <T>(
+  stream: ReadableStream<T>,
+  ...transforms: GeneratorFn<T>[]
 ) => {
   const composed = compose(...transforms);
   return generateStream(
@@ -40,8 +40,8 @@ export const pipeline = <D = Uint8Array>(
 /**
  * Iterates over a stream, yielding each chunk.
  */
-export const yieldStream = async function* <D = Uint8Array>(
-  stream: ReadableStream<D>,
+export const yieldStream = async function* <T>(
+  stream: ReadableStream<T>,
   controller?: AbortController
 ) {
   const reader = stream.getReader();

@@ -7,6 +7,9 @@ export interface TextStreamViewProps extends JSX.IntrinsicAttributes {
   as?: keyof JSX.IntrinsicElements;
 }
 
+/**
+ * Stream the given `url` and display the text as a `TextBufferView`.
+ */
 export const TextStreamView: FC<TextStreamViewProps> = ({
   as,
   url,

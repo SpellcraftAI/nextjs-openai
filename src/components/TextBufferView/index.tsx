@@ -15,28 +15,34 @@ export interface TextBufferView extends JSX.IntrinsicAttributes {
   as?: keyof JSX.IntrinsicElements;
 }
 
+/**
+ * View an updating buffer of text as a DOM node where the final chunk of text
+ * is faded in.
+ */
 export const TextBufferView: FC<TextBufferView> = ({
   buffer,
   as: ElementType = "p",
   ...props
 }) => {
-  const lastToken = buffer[buffer.length - 1] || "";
-  const leadingTokens = buffer.slice(0, buffer.length - 1).join("") || "&shy;";
-
+  /**
+   * The last token is the final token or an empty string.
+   */
+  const lastChunk = buffer[buffer.length - 1] || "";
+  /**
+   * The leading chunks are all but the last chunk, joined together, or a soft
+   * hyphen to ensure there is text to fill the container.
+   */
+  const leadingChunks = buffer.slice(0, buffer.length - 1).join("") || "&shy;";
   /**
    * Over five different approaches with useEffect() were tried, but none of
    * them worked reliably. We must RETVRN to native APIs.
-   *
-   * The soft hyphen &shy; is used to ensure there is text to fill the
-   * container, but it cannot be &nbsp; or it will cause clipping when the first
-   * character is written.
    */
   return (
     <>
       <style>{FADE_IN_CSS}</style>
       <ElementType
         dangerouslySetInnerHTML={{
-          __html: `${leadingTokens}<span class="fadeIn">${lastToken}</span>`
+          __html: `${leadingChunks}<span class="fadeIn">${lastChunk}</span>`
         }}
         {...props}
       />
