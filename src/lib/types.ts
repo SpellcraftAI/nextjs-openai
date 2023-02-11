@@ -9,20 +9,27 @@ export type OpenAIAPIEndpoint =
 "images" |
 "fine-tunes";
 
-export type OpenAICreateArgs =
-Exclude<
-(
-  CreateCompletionRequest |
-  CreateEditRequest |
-  CreateEmbeddingRequest |
-  CreateImageRequest |
-  CreateFineTuneRequest
-),
-"stream"
->;
+type OpenAIEndpointCreateProps = {
+  "completions": Exclude<CreateCompletionRequest, "stream">;
+  "edits": CreateEditRequest;
+  "embeddings": CreateEmbeddingRequest;
+  "images": CreateImageRequest;
+  "fine-tunes": CreateFineTuneRequest;
+};
+
+export type OpenAICreateArgs<T extends OpenAIAPIEndpoint> =
+OpenAIEndpointCreateProps[T];
 
 export type OpenAIStream = (
   endpoint: OpenAIAPIEndpoint,
-  args: OpenAICreateArgs,
+  args: OpenAICreateArgs<typeof endpoint>,
   mode?: StreamMode
 ) => Promise<ReadableStream<Uint8Array>>;
+
+export type {
+  CreateCompletionRequest,
+  CreateEditRequest,
+  CreateEmbeddingRequest,
+  CreateFineTuneRequest,
+  CreateImageRequest,
+} from "openai";

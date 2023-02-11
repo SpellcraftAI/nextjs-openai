@@ -1,8 +1,10 @@
 import Head from "next/head";
-import { useTokenStream } from "../hooks";
+import { TextBufferView } from "../components";
+import { TextStreamView } from "../components/TextStreamView";
+import { useTextStream } from "../hooks";
 
 export default function Home() {
-  const [text, refresh] = useTokenStream("/api/test");
+  const { buffer, refresh, cancel } = useTextStream("/api/demo");
 
   return (
     <>
@@ -12,11 +14,16 @@ export default function Home() {
 
       <main>
         <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
-          <p>{text}</p>
+          <TextBufferView buffer={buffer} />
         </div>
-        <button onClick={refresh}>Refresh</button>
+        <div>
+          <button className="w-full" onClick={refresh}>Refresh</button>
+          <button className="w-full" onClick={cancel}>Cancel</button>
+        </div>
+        <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
+          <TextStreamView url="/api/demo" />
+        </div>
       </main>
-
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { ENCODER, DECODER } from "../globs/shared";
-import { pipeline, readStream } from "./utils";
+import { pipeline, yieldStream } from "./utils";
 import { TokenParser } from "./transforms";
 import { createParser } from "eventsource-parser";
 
@@ -30,7 +30,7 @@ export const EventStream: OpenAIStream = (stream) => {
         }
       });
 
-      for await (const chunk of readStream(stream)) {
+      for await (const chunk of yieldStream(stream)) {
         parser.feed(DECODER.decode(chunk));
       }
     },

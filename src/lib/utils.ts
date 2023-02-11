@@ -28,9 +28,9 @@ export const pipeline = <D = Uint8Array>(
   ...transforms: GeneratorFn<D>[]
 ) => {
   const composed = compose(...transforms);
-  return createStream(
+  return generateStream(
     async function* () {
-      for await (const chunk of readStream(stream)) {
+      for await (const chunk of yieldStream(stream)) {
         yield* composed(chunk);
       }
     }
@@ -40,13 +40,17 @@ export const pipeline = <D = Uint8Array>(
 /**
  * Iterates over a stream, yielding each chunk.
  */
-export const readStream = async function* <D = Uint8Array>(
-  stream: ReadableStream<D>
+export const yieldStream = async function* <D = Uint8Array>(
+  stream: ReadableStream<D>,
+  controller?: AbortController
 ) {
   const reader = stream.getReader();
   while (true) {
-    const { done, value } = await reader.read();
+    if (controller?.signal.aborted) {
+      break;
+    }
 
+    const { done, value } = await reader.read();
     if (done) {
       break;
     }
@@ -58,7 +62,7 @@ export const readStream = async function* <D = Uint8Array>(
 /**
  * Creates a ReadableStream from a generator function.
  */
-export const createStream = <T, TReturn, D>(
+export const generateStream = <T, TReturn, D>(
   G: (
     ((data?: D) => AsyncGenerator<T, TReturn>) |
     ((data?: D) => Generator<T, TReturn>)
@@ -73,5 +77,16 @@ export const createStream = <T, TReturn, D>(
 
       controller.close();
     },
+  });
+};
+
+/**
+ * Creates a ReadableStream that yields all values in an array.
+ */
+export const streamArray = <T>(array: T[]) => {
+  return generateStream(function* () {
+    for (const item of array) {
+      yield item;
+    }
   });
 };
