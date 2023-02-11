@@ -1,18 +1,9 @@
 import { FC } from "react";
 
-const FADE_IN_CSS =
-`@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-.fadeIn {
-  animation: fadeIn 250ms cubic-bezier(0.55, 0.79, 0, 1.07);
-}`;
-
 export interface TextBufferView extends JSX.IntrinsicAttributes {
   buffer: string[];
   as?: keyof JSX.IntrinsicElements;
+  delay?: number;
 }
 
 /**
@@ -22,8 +13,12 @@ export interface TextBufferView extends JSX.IntrinsicAttributes {
 export const TextBufferView: FC<TextBufferView> = ({
   buffer,
   as: ElementType = "p",
+  delay = 300,
   ...props
 }) => {
+  const fadeInCSS =
+`@keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+.fadeIn { animation: fadeIn ${delay}ms cubic-bezier(0.55, 0.79, 0, 1.07); }`;
   /**
    * The last token is the final token or an empty string.
    */
@@ -39,7 +34,7 @@ export const TextBufferView: FC<TextBufferView> = ({
    */
   return (
     <>
-      <style>{FADE_IN_CSS}</style>
+      <style>{fadeInCSS}</style>
       <ElementType
         dangerouslySetInnerHTML={{
           __html: `${leadingChunks}<span class="fadeIn">${lastChunk}</span>`

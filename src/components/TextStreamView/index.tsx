@@ -5,6 +5,7 @@ import { TextBufferView } from "../TextBufferView";
 export interface TextStreamViewProps extends JSX.IntrinsicAttributes {
   url: string;
   as?: keyof JSX.IntrinsicElements;
+  delay?: number;
 }
 
 /**
@@ -13,10 +14,11 @@ export interface TextStreamViewProps extends JSX.IntrinsicAttributes {
 export const TextStreamView: FC<TextStreamViewProps> = ({
   as,
   url,
+  delay = 300,
   ...props
 }) => {
-  const { buffer } = useTextStream(url);
+  const { buffer } = useTextStream(url, delay);
   return (
-    <TextBufferView as={as} buffer={buffer} {...props} />
+    <TextBufferView as={as} delay={delay} buffer={buffer} {...props} />
   );
 };

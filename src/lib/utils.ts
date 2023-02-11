@@ -1,9 +1,6 @@
 export type GeneratorFn<T> =
   (data: T) => Generator<T> | AsyncGenerator<T>;
 
-export type StreamGenerator<T> =
-  () => Generator<T> | AsyncGenerator<T>;
-
 /**
  * `compose(f, g, h, ...)` returns a generator function `G(data)` that yields
  * all `(f · g · h · ...)(data)`.
@@ -59,14 +56,15 @@ export const yieldStream = async function* <T>(
   }
 };
 
+export type StreamGenerator<D, T, TReturn> =
+  ((data?: D) => AsyncGenerator<T, TReturn>) |
+  ((data?: D) => Generator<T, TReturn>);
+
 /**
  * Creates a ReadableStream from a generator function.
  */
 export const generateStream = <T, TReturn, D>(
-  G: (
-    ((data?: D) => AsyncGenerator<T, TReturn>) |
-    ((data?: D) => Generator<T, TReturn>)
-  ),
+  G: StreamGenerator<D, T, TReturn>,
   data?: D
 ) => {
   return new ReadableStream({
@@ -74,7 +72,6 @@ export const generateStream = <T, TReturn, D>(
       for await (const chunk of G(data)) {
         controller.enqueue(chunk);
       }
-
       controller.close();
     },
   });

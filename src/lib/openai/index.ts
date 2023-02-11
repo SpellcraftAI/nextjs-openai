@@ -57,6 +57,7 @@ export const OpenAI: OpenAIStream = async (
     case "tokens":
       const json = JSON.parse(stringResult);
       const { text } = json.choices?.[0] ?? {};
+
       if (typeof text !== "string") {
         console.error("No text choices received from OpenAI: " + stringResult);
         return streamArray([]);
