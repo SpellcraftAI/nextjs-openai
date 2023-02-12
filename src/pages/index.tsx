@@ -12,15 +12,17 @@ export default function Home() {
 
       <main>
         <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
-          <StreamingText fade={600} buffer={buffer} />
+          {/* <StreamingText fade={600} buffer={buffer} /> */}
+          <StreamingText buffer={buffer} fade={600} />
+
         </div>
         <div className="flex flex-row">
           <button className="w-full" onClick={refresh}>Refresh</button>
           <button className="w-full" onClick={cancel}>Cancel</button>
         </div>
-        <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
+        {/* <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
           <StreamingText.URL url="/api/demo" fade={600} throttle={100} />
-        </div>
+        </div> */}
       </main>
     </>
   );
