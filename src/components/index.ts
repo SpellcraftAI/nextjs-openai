@@ -1,1 +1,1 @@
-export * from "./TextBufferView";
+export * from "./StreamingText";

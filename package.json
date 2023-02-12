@@ -1,8 +1,12 @@
 {
   "name": "nextjs-openai",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": "./dist/index.js"
