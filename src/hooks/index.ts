@@ -1,1 +1,1 @@
-export * from "./useTextStream";
+export * from "./useTextBuffer";

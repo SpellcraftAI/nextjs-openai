@@ -15,12 +15,16 @@ export const EventStream: OpenAIStream = (stream) => {
       const parser = createParser((event) => {
         if (event.type === "event") {
           const { data } = event;
-
+          /**
+           * Break if event stream finished.
+           */
           if (data === "[DONE]") {
             controller.close();
             return;
           }
-
+          /**
+           * Verify we have a valid JSON object and then enqueue it.
+           */
           try {
             JSON.parse(data);
             controller.enqueue(ENCODER.encode(data));
@@ -29,7 +33,9 @@ export const EventStream: OpenAIStream = (stream) => {
           }
         }
       });
-
+      /**
+       * Feed the parser with decoded chunks from the raw stream.
+       */
       for await (const chunk of yieldStream(stream)) {
         parser.feed(DECODER.decode(chunk));
       }

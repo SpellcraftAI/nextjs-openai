@@ -8,11 +8,11 @@ import { useBuffer } from "../useBuffer";
  * @note Thanks to GPT for guidance on AbortControllers and fucked up state
  * logic.
  */
-export const useTextStream = (
+export const useTextBuffer = (
   url: string,
-  delay = 300,
+  throttle = 0,
 ) => {
-  const { buffer, ...hooks } = useBuffer(url, delay);
+  const { buffer, ...hooks } = useBuffer(url, throttle);
   const [textBuffer, setTextBuffer] = useState<string[]>([]);
 
   useEffect(

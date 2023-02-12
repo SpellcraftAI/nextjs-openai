@@ -1,11 +1,12 @@
 import { FC } from "react";
-import { useTextStream } from "../../hooks";
+import { useTextBuffer } from "../../hooks";
 import { TextBufferView } from "../TextBufferView";
 
 export interface TextStreamViewProps extends JSX.IntrinsicAttributes {
   url: string;
   as?: keyof JSX.IntrinsicElements;
-  delay?: number;
+  fade?: number;
+  throttle?: number;
 }
 
 /**
@@ -14,11 +15,12 @@ export interface TextStreamViewProps extends JSX.IntrinsicAttributes {
 export const TextStreamView: FC<TextStreamViewProps> = ({
   as,
   url,
-  delay = 300,
+  fade = 1000,
+  throttle = fade / 4,
   ...props
 }) => {
-  const { buffer } = useTextStream(url, delay);
+  const { buffer } = useTextBuffer(url, throttle);
   return (
-    <TextBufferView as={as} delay={delay} buffer={buffer} {...props} />
+    <TextBufferView as={as} fade={fade} buffer={buffer} {...props} />
   );
 };

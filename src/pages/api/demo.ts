@@ -6,7 +6,7 @@ export default async function test() {
     // input: "What day of the wek is it?",
     // instruction: "Fix the spelling mistakes",
     model: "text-davinci-003",
-    prompt: "Write two sentences.\n\n",
+    prompt: "Write a three-sentence paragraph.\n\n",
     temperature: 1,
     max_tokens: 100,
   };

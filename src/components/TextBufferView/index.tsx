@@ -3,7 +3,7 @@ import { FC } from "react";
 export interface TextBufferView extends JSX.IntrinsicAttributes {
   buffer: string[];
   as?: keyof JSX.IntrinsicElements;
-  delay?: number;
+  fade?: number;
 }
 
 /**
@@ -13,12 +13,12 @@ export interface TextBufferView extends JSX.IntrinsicAttributes {
 export const TextBufferView: FC<TextBufferView> = ({
   buffer,
   as: ElementType = "p",
-  delay = 300,
+  fade = 300,
   ...props
 }) => {
   const fadeInCSS =
 `@keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-.fadeIn { animation: fadeIn ${delay}ms cubic-bezier(0.55, 0.79, 0, 1.07); }`;
+.fadeIn { animation: fadeIn ${fade}ms cubic-bezier(0.55, 0.79, 0, 1.07); }`;
   /**
    * The last token is the final token or an empty string.
    */

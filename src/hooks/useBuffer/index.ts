@@ -57,7 +57,7 @@ const streamReducer = (prevState: State, action: Action) => {
  */
 export const useBuffer = (
   url: string,
-  delay = 300
+  delay = 0
 ) => {
   const initialState: State = {
     done: false,
@@ -100,11 +100,13 @@ export const useBuffer = (
               payload: chunk,
             });
 
-            const timeSinceLastUpdate = Date.now() - lastUpdateTime;
-            const timeToWait = Math.max(0, delay - timeSinceLastUpdate);
+            if (delay) {
+              const timeSinceLastUpdate = Date.now() - lastUpdateTime;
+              const timeToWait = Math.max(0, delay - timeSinceLastUpdate);
 
-            await new Promise((resolve) => setTimeout(resolve, timeToWait));
-            lastUpdateTime = Date.now();
+              await new Promise((resolve) => setTimeout(resolve, timeToWait));
+              lastUpdateTime = Date.now();
+            }
           }
         } catch (error) {
           if (error instanceof DOMException && error.name === "AbortError") {
