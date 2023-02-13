@@ -9,6 +9,9 @@ export type OpenAIStream =
 
 /**
  * A `ReadableStream` of server sent events from the given OpenAI API stream.
+ *
+ * @note This can't be done via a generator while using `createParser` because
+ * there is no way to yield from within the callback.
  */
 export const EventStream: OpenAIStream = (stream) => {
   return new ReadableStream<Uint8Array>({

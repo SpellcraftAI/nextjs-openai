@@ -1,53 +1,6 @@
 import { useEffect, useReducer } from "react";
 import { yieldStream } from "yield-stream";
-
-type State = {
-  done: boolean;
-  buffer: Uint8Array[];
-  refreshCount: number;
-  aborted: boolean;
-  controller: AbortController | null;
-};
-
-type Action =
-  | { type: "cancel" }
-  | { type: "refresh" }
-  | { type: "add"; payload: Uint8Array }
-  | { type: "setController"; payload: AbortController };
-
-const streamReducer = (prevState: State, action: Action) => {
-  switch (action.type) {
-    case "cancel":
-      prevState.controller?.abort();
-      return {
-        ...prevState,
-        aborted: true,
-        controller: null,
-      };
-    case "refresh":
-      prevState.controller?.abort();
-      return {
-        ...prevState,
-        aborted: false,
-        buffer: [],
-        refreshCount: prevState.refreshCount + 1,
-        controller: new AbortController(),
-      };
-    case "add":
-      return {
-        ...prevState,
-        buffer: prevState.buffer.concat(action.payload),
-      };
-    case "setController":
-      return {
-        ...prevState,
-        controller: action.payload,
-      };
-    default:
-      return prevState;
-  }
-};
-
+import { State, streamState } from "./state";
 
 /**
  * Custom hook that updates with the current token buffer.
@@ -67,11 +20,7 @@ export const useBuffer = (
     controller: null,
   };
 
-  const [state, dispatch] = useReducer(
-    streamReducer,
-    initialState
-  );
-
+  const [state, dispatch] = useReducer(streamState, initialState);
   const { done, buffer, refreshCount } = state;
 
   /**

@@ -22,12 +22,11 @@ export type OpenAICreateArgs<T extends OpenAIAPIEndpoint> =
             ? CreateFineTuneRequest
             : never;
 
-export type OpenAIStream = <T extends OpenAIAPIEndpoint>(
+export type OpenAIAPI = <T extends OpenAIAPIEndpoint>(
   endpoint: T,
   args: OpenAICreateArgs<T>,
   mode?: StreamMode
 ) => Promise<ReadableStream<Uint8Array>>;
-
 
 export type {
   CreateCompletionRequest,
