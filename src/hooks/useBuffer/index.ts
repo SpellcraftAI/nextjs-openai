@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { yieldStream } from "../../lib/utils";
+import { yieldStream } from "yield-stream";
 
 type State = {
   done: boolean;

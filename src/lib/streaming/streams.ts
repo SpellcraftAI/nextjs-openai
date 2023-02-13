@@ -1,7 +1,8 @@
-import { ENCODER, DECODER } from "../globs/shared";
-import { pipeline, yieldStream } from "./utils";
+import { ENCODER, DECODER } from "../../globs";
 import { TokenParser } from "./transforms";
+
 import { createParser } from "eventsource-parser";
+import { pipeline, yieldStream } from "yield-stream";
 
 export type OpenAIStream =
   (stream: ReadableStream<Uint8Array>) => ReadableStream<Uint8Array>;

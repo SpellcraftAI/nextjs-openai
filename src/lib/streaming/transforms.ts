@@ -1,6 +1,5 @@
-import { ENCODER, DECODER } from "../globs/shared";
-
-export type Transform = (chunk: Uint8Array) => AsyncGenerator<Uint8Array>;
+import { Transform } from "yield-stream";
+import { ENCODER, DECODER } from "../../globs";
 
 /**
  * A transformer that receives chunks of parsed server sent events from OpenAI

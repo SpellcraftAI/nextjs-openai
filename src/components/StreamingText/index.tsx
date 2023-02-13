@@ -6,7 +6,6 @@ export type StreamingTextProps = {
   buffer: string[];
   as?: keyof JSX.IntrinsicElements;
   fade?: number;
-  // throttle?: number;
 };
 
 export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"> {
@@ -25,6 +24,16 @@ export const StreamingText: StreamingTextComponent = ({
 }) => {
   const textRef = useRef<HTMLElement>(null);
 
+  const keyframes = [
+    { opacity: 0 },
+    { opacity: 1 }
+  ];
+
+  const config = {
+    duration: fade,
+    easing: "cubic-bezier(0.83, 0, 0.17, 1)",
+  };
+
   useEffect(
     () => {
       const textElement = textRef.current;
@@ -34,16 +43,6 @@ export const StreamingText: StreamingTextComponent = ({
         const lastSpan = spanElements[spanElements.length - 1];
 
         if (lastSpan) {
-          const keyframes = [
-            { opacity: 0 },
-            { opacity: 1 }
-          ];
-
-          const config = {
-            duration: fade,
-            easing: "cubic-bezier(0.83, 0, 0.17, 1)",
-          };
-
           lastSpan.animate(keyframes, config);
         }
       }

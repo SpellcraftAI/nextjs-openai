@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import { OPENAI_API_KEY } from "../../globs/node";
-import { ENCODER } from "../../globs/shared";
-import { EventStream, TokenStream } from "../streams";
+import { streamArray } from "yield-stream";
+import { ENCODER, OPENAI_API_KEY } from "../../globs";
+import { EventStream, TokenStream } from "../streaming";
 import { OpenAIStream } from "../types";
-import { streamArray } from "../utils";
 
 /**
  * Create a new completion stream. Stream of strings by default, set `mode:
