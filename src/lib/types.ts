@@ -9,14 +9,6 @@ export type OpenAIAPIEndpoint =
 "images" |
 "fine-tunes";
 
-type OpenAIEndpointCreateProps = {
-  "completions": Exclude<CreateCompletionRequest, "stream">;
-  "edits": CreateEditRequest;
-  "embeddings": CreateEmbeddingRequest;
-  "images": CreateImageRequest;
-  "fine-tunes": CreateFineTuneRequest;
-};
-
 export type OpenAICreateArgs<T extends OpenAIAPIEndpoint> =
   T extends "completions"
     ? Exclude<CreateCompletionRequest, "stream">

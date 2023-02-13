@@ -1,4 +1,4 @@
-import { CreateCompletionRequest, OpenAI } from "../../lib";
+import { OpenAI } from "../../lib";
 
 export default async function test() {
   const config = {
