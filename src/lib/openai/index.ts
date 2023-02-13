@@ -2,17 +2,15 @@
 import { streamArray } from "yield-stream";
 import { ENCODER, OPENAI_API_KEY } from "../../globs";
 import { EventStream, TokenStream } from "../streaming";
-import { OpenAIStream } from "../types";
+import { OpenAIAPIEndpoint, OpenAICreateArgs, OpenAIStream } from "../types";
 
 /**
  * Create a new completion stream. Stream of strings by default, set `mode:
  * 'raw'` for the raw stream of JSON objects.
  */
-export const OpenAI: OpenAIStream = async (
-  endpoint,
-  {
-    ...args
-  },
+export const OpenAI: OpenAIStream = async <T extends OpenAIAPIEndpoint>(
+  endpoint: T,
+  args: OpenAICreateArgs<T>,
   mode = "tokens"
 ) => {
   const stream = endpoint === "completions";

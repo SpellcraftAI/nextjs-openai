@@ -1,4 +1,4 @@
-import { ENCODER, DECODER } from "../../globs";
+import { ENCODER, DECODER } from "../../globs/shared";
 import { TokenParser } from "./transforms";
 
 import { createParser } from "eventsource-parser";

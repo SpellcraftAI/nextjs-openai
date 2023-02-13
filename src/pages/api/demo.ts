@@ -1,4 +1,4 @@
-import { OpenAI } from "../../lib";
+import { CreateCompletionRequest, OpenAI } from "../../lib";
 
 export default async function test() {
   const config = {
@@ -10,6 +10,7 @@ export default async function test() {
     temperature: 1,
     max_tokens: 100,
   };
+
   const completionsStream = await OpenAI(
     // "edits",
     "completions",

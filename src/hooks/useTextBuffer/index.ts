@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DECODER } from "../../globs";
+import { DECODER } from "../../globs/shared";
 import { useBuffer } from "../useBuffer";
 
 /**

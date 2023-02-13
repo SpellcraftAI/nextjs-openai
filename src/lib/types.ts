@@ -18,13 +18,24 @@ type OpenAIEndpointCreateProps = {
 };
 
 export type OpenAICreateArgs<T extends OpenAIAPIEndpoint> =
-OpenAIEndpointCreateProps[T];
+  T extends "completions"
+    ? Exclude<CreateCompletionRequest, "stream">
+    : T extends "edits"
+      ? CreateEditRequest
+      : T extends "embeddings"
+        ? CreateEmbeddingRequest
+        : T extends "images"
+          ? CreateImageRequest
+          : T extends "fine-tunes"
+            ? CreateFineTuneRequest
+            : never;
 
-export type OpenAIStream = (
-  endpoint: OpenAIAPIEndpoint,
-  args: OpenAICreateArgs<typeof endpoint>,
+export type OpenAIStream = <T extends OpenAIAPIEndpoint>(
+  endpoint: T,
+  args: OpenAICreateArgs<T>,
   mode?: StreamMode
 ) => Promise<ReadableStream<Uint8Array>>;
+
 
 export type {
   CreateCompletionRequest,
