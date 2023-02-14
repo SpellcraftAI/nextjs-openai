@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { FC, useEffect, useMemo, useRef, memo, forwardRef, Ref } from "react";
+import { FC, useEffect, useMemo, useRef } from "react";
 import { useTextBuffer } from "../../hooks";
 
 export type StreamingTextProps = {
@@ -12,11 +12,11 @@ export type StreamingTextProps = {
  * A component that streams in a buffer of text, animating in each chunk as it's
  * added.
  */
-export const StreamingText: FC<StreamingTextProps> = memo(forwardRef(({
+export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
   as: ElementType = "p",
   fade = 600,
-}, ref: Ref<HTMLElement>) => {
+}) => {
   const textRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const StreamingText: FC<StreamingTextProps> = memo(forwardRef(({
 
       if (lastSpan) {
         const keyframes = [
-          { opacity: 0 },
+          { opacity: 0.01 },
           { opacity: 1 }
         ];
 
@@ -38,13 +38,13 @@ export const StreamingText: FC<StreamingTextProps> = memo(forwardRef(({
           easing: "cubic-bezier(0.7, 0, 0.84, 0)",
         };
 
-        lastSpan.animate(keyframes, config);
+        // lastSpan.animate(keyframes, config);
 
-        // const animation =  requestAnimationFrame(
-        //   () => lastSpan.animate(keyframes, config)
-        // );
+        const animation =  requestAnimationFrame(
+          () => lastSpan.animate(keyframes, config)
+        );
 
-        // return () => cancelAnimationFrame(animation);
+        return () => cancelAnimationFrame(animation);
       }
     }
 
@@ -70,11 +70,11 @@ export const StreamingText: FC<StreamingTextProps> = memo(forwardRef(({
 
   return (
     // @ts-ignore - Ref can be any
-    <ElementType ref={ref ?? textRef}>
+    <ElementType ref={textRef}>
       {!fadedChunks.length ? <>&shy;</> : fadedChunks}
     </ElementType>
   );
-}));
+};
 
 export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"> {
   url: string;

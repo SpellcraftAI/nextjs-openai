@@ -4,6 +4,7 @@ import { useTextBuffer } from "../hooks";
 
 export default function Home() {
   const { buffer, refresh, cancel } = useTextBuffer("/api/demo", 200);
+
   return (
     <>
       <Head>
