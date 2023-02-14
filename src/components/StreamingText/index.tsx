@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { FC, useEffect, useMemo, useRef } from "react";
 import { useTextBuffer } from "../../hooks";
 
@@ -8,72 +7,52 @@ export type StreamingTextProps = {
   fade?: number;
 };
 
-/**
- * A component that streams in a buffer of text, animating in each chunk as it's
- * added.
- */
 export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
   as: ElementType = "p",
   fade = 600,
 }) => {
   const textRef = useRef<HTMLElement>(null);
+  const lastAnimatedIndexRef = useRef(-1);
+  const lastSpanRef = useRef<HTMLElement | null>(null);
 
-  const fadedChunks = useMemo(() => buffer.map(
-    (chunk, i) => {
-      const isFirst = i === 0;
-      const isBlank = !chunk.trim();
-
-      if (isFirst && isBlank) {
-        return <span key={i}>&shy;</span>;
-      }
-
-      return (
-        // Important to set the opacity to 0.01 so that there is no chance of
-        // the text being painted before the animation starts.
-        <span style={{ opacity: 0 }} key={i}>
-          {chunk}
-        </span>
-      );
-    }
-  ), [buffer]);
+  const fadedChunks = useMemo(
+    () =>
+      buffer.map((chunk, i) => {
+        const opacity = i <= lastAnimatedIndexRef.current ? 1 : 0;
+        return <span style={{ opacity }} key={i}>{chunk}</span>;
+      }),
+    [buffer]
+  );
 
   useEffect(() => {
     const textElement = textRef.current;
+    if (!textElement) return;
 
-    if (textElement) {
-      const spanElements = textElement.getElementsByTagName("span");
-      const lastSpan = spanElements[spanElements.length - 1];
+    const spanElements = textElement.getElementsByTagName("span");
+    const lastSpan = spanElements[spanElements.length - 1];
 
-      if (lastSpan) {
-        const keyframes = [
-          { opacity: 0 },
-          { opacity: 1 }
-        ];
+    if (!lastSpan || lastSpan === lastSpanRef.current) return;
 
-        const config = {
-          duration: fade,
-          // easeInExpo
-          easing: "cubic-bezier(0.7, 0, 0.84, 0)",
-        };
+    const keyframes = [{ opacity: 0 }, { opacity: 1 }];
+    const config = {
+      duration: fade,
+      easing: "cubic-bezier(0.7, 0, 0.84, 0)",
+    };
 
-        const animation = requestAnimationFrame(
-          () => {
-            lastSpan.animate(keyframes, config);
-            lastSpan.style.opacity = "1.0";
-          }
-        );
+    const animation = lastSpan.animate(keyframes, config);
+    animation.onfinish = () => {
+      lastSpan.style.opacity = "1.0";
+      lastAnimatedIndexRef.current += 1;
+    };
 
-        // return () => cancelAnimationFrame(animation);
-      }
-    }
-    return;
-  }, [buffer, fade]);
+    lastSpanRef.current = lastSpan;
+  }, [buffer, fade, lastSpanRef]);
 
   return (
-    // @ts-ignore - Ref can be any
+    // @ts-ignore - ref any
     <ElementType ref={textRef}>
-      {!fadedChunks.length ? <>&shy;</> : fadedChunks}
+      {fadedChunks.length === 0 ? <>&shy;</> : fadedChunks}
     </ElementType>
   );
 };
@@ -89,7 +68,5 @@ export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   ...props
 }) => {
   const { buffer } = useTextBuffer(url, throttle);
-  return <StreamingText buffer={buffer} {...props}  />;
+  return <StreamingText buffer={buffer} {...props} />;
 };
-
-// StreamingText.URL = StreamingTextURL;
