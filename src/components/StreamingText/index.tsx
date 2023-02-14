@@ -12,14 +12,14 @@ export const StreamingText: FC<StreamingTextProps> = ({
   as: ElementType = "p",
   fade = 600,
 }) => {
-  const textRef = useRef<HTMLElement>(null);
-  const lastAnimatedIndexRef = useRef(-1);
+  const textRef = useRef<HTMLElement | null>(null);
   const lastSpanRef = useRef<HTMLElement | null>(null);
+  const lastAnimatedIndexRef = useRef(-1);
 
   const fadedChunks = useMemo(
     () =>
       buffer.map((chunk, i) => {
-        const opacity = i <= lastAnimatedIndexRef.current ? 1 : 0;
+        const opacity = 0;
         return <span style={{ opacity }} key={i}>{chunk}</span>;
       }),
     [buffer]
@@ -42,7 +42,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
 
     const animation = lastSpan.animate(keyframes, config);
     animation.onfinish = () => {
-      lastSpan.style.opacity = "1.0";
+      lastSpan.style.opacity = "1";
       lastAnimatedIndexRef.current += 1;
     };
 
