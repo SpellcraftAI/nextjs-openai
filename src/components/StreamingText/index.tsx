@@ -1,4 +1,14 @@
-import { FC, useEffect, useMemo, useRef } from "react";
+/**
+ * @fileoverview
+ *
+ * This is meant to be the simplest component that can read text from a stream
+ * and render it using a fade-in animation.
+ *
+ * I was both depressed and inspired by how uncooperative React is with such a
+ * simple use case, especially for Safari. We did the best we could.
+ */
+
+import { FC, useEffect, useRef, useState } from "react";
 import { useTextBuffer } from "../../hooks";
 
 export type StreamingTextProps = {
@@ -7,52 +17,73 @@ export type StreamingTextProps = {
   fade?: number;
 };
 
+/**
+ * StreamingText renders the chunks of an updating buffer of text with a fade-in
+ * animation.
+ */
 export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
   as: ElementType = "p",
   fade = 600,
 }) => {
-  const textRef = useRef<HTMLElement | null>(null);
-  const lastSpanRef = useRef<HTMLElement | null>(null);
-  const lastAnimatedIndexRef = useRef(-1);
+  const text = buffer.join("");
+  const empty = buffer.length === 0 || text.trim() === "";
+  const [index, setIndex] = useState(0);
+  const textRef = useRef<HTMLElement>(null);
+  const fadedChunks = buffer.map((chunk, i) => (
+    <span style={{ opacity: i < index ? 1 : 0 }} key={i}>
+      {chunk}
+    </span>
+  ));
 
-  const fadedChunks = useMemo(
-    () =>
-      buffer.map((chunk, i) => {
-        const opacity = 0;
-        return <span style={{ opacity }} key={i}>{chunk}</span>;
-      }),
-    [buffer]
+  /**
+   * Handle resets and buffer size changes.
+   */
+  useEffect(
+    () => {
+      if (index >= buffer.length) {
+        setIndex(buffer.length);
+      }
+    },
+    [buffer.length, index]
   );
 
+  /**
+   * Schedule a fade-in animation for the last span element and increment the
+   * index.
+   */
   useEffect(() => {
     const textElement = textRef.current;
     if (!textElement) return;
 
     const spanElements = textElement.getElementsByTagName("span");
-    const lastSpan = spanElements[spanElements.length - 1];
+    if (spanElements.length <= index) return;
 
-    if (!lastSpan || lastSpan === lastSpanRef.current) return;
+    const lastSpan = spanElements[index];
+    if (!lastSpan) return;
 
-    const keyframes = [{ opacity: 0 }, { opacity: 1 }];
-    const config = {
-      duration: fade,
-      easing: "cubic-bezier(0.7, 0, 0.84, 0)",
-    };
+    const animation = lastSpan.animate(
+      [
+        { opacity: 0 },
+        { opacity: 1 }
+      ],
+      {
+        duration: fade,
+        easing: "cubic-bezier(0.7, 0, 0.84, 0)",
+      }
+    );
 
-    const animation = lastSpan.animate(keyframes, config);
     animation.onfinish = () => {
       lastSpan.style.opacity = "1";
-      lastAnimatedIndexRef.current += 1;
     };
 
-    lastSpanRef.current = lastSpan;
-  }, [buffer, fade, lastSpanRef]);
+    setIndex(index + 1);
+  }, [buffer, fade, index]);
 
   return (
     // @ts-ignore - ref any
     <ElementType ref={textRef}>
-      {fadedChunks.length === 0 ? <>&shy;</> : fadedChunks}
+      {empty ? <>&shy;</> : fadedChunks}
     </ElementType>
   );
 };
@@ -62,6 +93,9 @@ export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"
   throttle?: number;
 }
 
+/**
+ * Wrapper around `<StreamingText>` that fetches the text stream from a URL.
+ */
 export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   url,
   throttle = 100,

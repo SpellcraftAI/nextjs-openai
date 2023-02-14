@@ -3,7 +3,7 @@ import { StreamingText } from "../components/StreamingText";
 import { useTextBuffer } from "../hooks";
 
 export default function Home() {
-  const { buffer, refresh, cancel } = useTextBuffer("/api/demo", 100);
+  const { buffer, refresh, cancel } = useTextBuffer("/api/demo", 200);
 
   return (
     <>
