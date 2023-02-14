@@ -38,11 +38,13 @@ export const StreamingText: FC<StreamingTextProps> = memo(forwardRef(({
           easing: "cubic-bezier(0.7, 0, 0.84, 0)",
         };
 
-        const animation =  requestAnimationFrame(
-          () => lastSpan.animate(keyframes, config)
-        );
+        lastSpan.animate(keyframes, config);
 
-        return () => cancelAnimationFrame(animation);
+        // const animation =  requestAnimationFrame(
+        //   () => lastSpan.animate(keyframes, config)
+        // );
+
+        // return () => cancelAnimationFrame(animation);
       }
     }
 
