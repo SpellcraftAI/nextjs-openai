@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useMemo, useRef, memo, forwardRef, Ref } from "react";
 import { useTextBuffer } from "../../hooks";
 
 export type StreamingTextProps = {
@@ -8,59 +8,78 @@ export type StreamingTextProps = {
   fade?: number;
 };
 
+/**
+ * A component that streams in a buffer of text, animating in each chunk as it's
+ * added.
+ */
+export const StreamingText: FC<StreamingTextProps> = memo(forwardRef(({
+  buffer,
+  as: ElementType = "p",
+  fade = 600,
+}, ref: Ref<HTMLElement>) => {
+  const textRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const textElement = textRef.current;
+
+    if (textElement) {
+      const spanElements = textElement.getElementsByTagName("span");
+      const lastSpan = spanElements[spanElements.length - 1];
+
+      if (lastSpan) {
+        const keyframes = [
+          { opacity: 0 },
+          { opacity: 1 }
+        ];
+
+        const config = {
+          duration: fade,
+          // easeInExpo
+          easing: "cubic-bezier(0.7, 0, 0.84, 0)",
+        };
+
+        const animation =  requestAnimationFrame(
+          () => lastSpan.animate(keyframes, config)
+        );
+
+        return () => cancelAnimationFrame(animation);
+      }
+    }
+
+    return;
+  }, [buffer, fade]);
+
+  const fadedChunks = useMemo(() => buffer.map(
+    (chunk, i) => {
+      const isFirst = i === 0;
+      const isBlank = !chunk.trim();
+
+      if (isFirst && isBlank) {
+        return <>&shy;</>;
+      }
+
+      return (
+        <span key={i}>
+          {chunk}
+        </span>
+      );
+    }
+  ), [buffer]);
+
+  return (
+    // @ts-ignore - Ref can be any
+    <ElementType ref={ref ?? textRef}>
+      {!fadedChunks.length ? <>&shy;</> : fadedChunks}
+    </ElementType>
+  );
+}));
+
 export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"> {
   url: string;
   throttle?: number;
 }
 
-export type StreamingTextComponent = FC<StreamingTextProps> & {
-  URL: FC<StreamingTextURLProps>;
-};
-
-export const StreamingText: StreamingTextComponent = ({
-  buffer,
-  as: ElementType = "p",
-  fade = 600,
-}) => {
-  const textRef = useRef<HTMLElement>(null);
-
-  const keyframes = [
-    { opacity: 0 },
-    { opacity: 1 }
-  ];
-
-  const config = {
-    duration: fade,
-    easing: "cubic-bezier(0.83, 0, 0.17, 1)",
-  };
-
-  useEffect(
-    () => {
-      const textElement = textRef.current;
-
-      if (textElement) {
-        const spanElements = textElement.getElementsByTagName("span");
-        const lastSpan = spanElements[spanElements.length - 1];
-
-        if (lastSpan) {
-          lastSpan.animate(keyframes, config);
-        }
-      }
-    },
-    [buffer, fade]
-  );
-
-
-  const faded = buffer.map((chunk, i) => (<span key={i}>{chunk}</span>));
-  return (
-    // @ts-ignore - Ref can be any
-    <ElementType ref={textRef}>
-      {faded.length ? faded : <>&shy;</>}
-    </ElementType>
-  );
-};
-
-const StreamingTextURL: FC<StreamingTextURLProps> = ({
+export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   url,
   throttle = 100,
   ...props
@@ -69,4 +88,4 @@ const StreamingTextURL: FC<StreamingTextURLProps> = ({
   return <StreamingText buffer={buffer} {...props}  />;
 };
 
-StreamingText.URL = StreamingTextURL;
+// StreamingText.URL = StreamingTextURL;
