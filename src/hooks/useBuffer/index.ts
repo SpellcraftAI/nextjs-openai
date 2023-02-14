@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { yieldStream } from "yield-stream";
 import { State, streamState } from "./state";
 
@@ -23,6 +23,29 @@ export const useBuffer = (
   const [state, dispatch] = useReducer(streamState, initialState);
   const { done, buffer, refreshCount } = state;
 
+
+  const streamChunks = useCallback(
+    async (
+      stream: AsyncGenerator<Uint8Array>,
+      delay: number
+    ) => {
+      let lastUpdateTime = 0;
+
+      for await (const chunk of stream) {
+        dispatch({ type: "add", payload: chunk });
+
+        if (delay) {
+          const timeSinceLastUpdate = Date.now() - lastUpdateTime;
+          const timeToWait = Math.max(0, delay - timeSinceLastUpdate);
+
+          await new Promise((resolve) => setTimeout(resolve, timeToWait));
+          lastUpdateTime = Date.now();
+        }
+      }
+    },
+    [dispatch]
+  );
+
   /**
    * Fetch the new token stream.
    */
@@ -31,6 +54,7 @@ export const useBuffer = (
       const newController = new AbortController();
       dispatch({ type: "setController", payload: newController });
 
+      let animation: number;
       (async () => {
         try {
           const { signal } = newController;
@@ -41,22 +65,7 @@ export const useBuffer = (
           }
 
           const stream = yieldStream(response.body, newController);
-          let lastUpdateTime = 0;
-
-          for await (const chunk of stream) {
-            dispatch({
-              type: "add",
-              payload: chunk,
-            });
-
-            if (delay) {
-              const timeSinceLastUpdate = Date.now() - lastUpdateTime;
-              const timeToWait = Math.max(0, delay - timeSinceLastUpdate);
-
-              await new Promise((resolve) => setTimeout(resolve, timeToWait));
-              lastUpdateTime = Date.now();
-            }
-          }
+          animation = requestAnimationFrame(() => streamChunks(stream, delay));
         } catch (error) {
           if (error instanceof DOMException && error.name === "AbortError") {
             // The stream was cancelled.
@@ -68,9 +77,11 @@ export const useBuffer = (
 
       return () => {
         newController.abort();
+        cancelAnimationFrame(animation);
       };
+
     },
-    [refreshCount, url, delay]
+    [refreshCount, url, delay, streamChunks]
   );
 
   return {

@@ -33,6 +33,7 @@ export const streamState = (prevState: State, action: Action) => {
       };
 
     case "add":
+      console.log("Adding chunk to buffer", action.payload);
       return {
         ...prevState,
         buffer: prevState.buffer.concat(action.payload),

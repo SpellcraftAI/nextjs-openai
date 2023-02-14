@@ -19,6 +19,25 @@ export const StreamingText: FC<StreamingTextProps> = ({
 }) => {
   const textRef = useRef<HTMLElement>(null);
 
+  const fadedChunks = useMemo(() => buffer.map(
+    (chunk, i) => {
+      const isFirst = i === 0;
+      const isBlank = !chunk.trim();
+
+      if (isFirst && isBlank) {
+        return <span key={i}>&shy;</span>;
+      }
+
+      return (
+        // Important to set the opacity to 0.01 so that there is no chance of
+        // the text being painted before the animation starts.
+        <span style={{ opacity: 0 }} key={i}>
+          {chunk}
+        </span>
+      );
+    }
+  ), [buffer]);
+
   useEffect(() => {
     const textElement = textRef.current;
 
@@ -28,7 +47,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
 
       if (lastSpan) {
         const keyframes = [
-          { opacity: 0.01 },
+          { opacity: 0 },
           { opacity: 1 }
         ];
 
@@ -38,35 +57,18 @@ export const StreamingText: FC<StreamingTextProps> = ({
           easing: "cubic-bezier(0.7, 0, 0.84, 0)",
         };
 
-        // lastSpan.animate(keyframes, config);
-
-        const animation =  requestAnimationFrame(
-          () => lastSpan.animate(keyframes, config)
+        const animation = requestAnimationFrame(
+          () => {
+            lastSpan.animate(keyframes, config);
+            lastSpan.style.opacity = "1.0";
+          }
         );
 
-        return () => cancelAnimationFrame(animation);
+        // return () => cancelAnimationFrame(animation);
       }
     }
-
     return;
   }, [buffer, fade]);
-
-  const fadedChunks = useMemo(() => buffer.map(
-    (chunk, i) => {
-      const isFirst = i === 0;
-      const isBlank = !chunk.trim();
-
-      if (isFirst && isBlank) {
-        return <>&shy;</>;
-      }
-
-      return (
-        <span key={i}>
-          {chunk}
-        </span>
-      );
-    }
-  ), [buffer]);
 
   return (
     // @ts-ignore - Ref can be any
