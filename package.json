@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "eventsource-parser": "^0.0.5",
+    "openai-streams": "^1.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "yield-stream": "^1.0.0"
