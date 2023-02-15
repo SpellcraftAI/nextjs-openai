@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Head from "next/head";
 import { StreamingText } from "../components/StreamingText";
 import { useTextBuffer } from "../hooks";
