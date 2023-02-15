@@ -1,3 +1,4 @@
 {
+  "name": "nextjs-openai",
   "out": "./public/docs"
 }
