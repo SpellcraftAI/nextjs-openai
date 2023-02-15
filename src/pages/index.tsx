@@ -20,9 +20,6 @@ export default function Home() {
           <button className="w-full" onClick={refresh}>Refresh</button>
           <button className="w-full" onClick={cancel}>Cancel</button>
         </div>
-        {/* <div className="w-full max-w-md p-4 rounded-lg border-solid border-2 border-gray-400">
-          <StreamingText.URL url="/api/demo" fade={600} throttle={100} />
-        </div> */}
       </main>
     </>
   );
