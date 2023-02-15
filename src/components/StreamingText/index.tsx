@@ -35,12 +35,13 @@ export interface StreamingTextProps {
  *
  * @example
  * ```tsx
- * const { buffer, done, refresh } = useTextBuffer(url, 500);
+ * const { buffer, refresh, cancel, done } = useTextBuffer(url, 500);
  *
  * return (
  *  <div>
  *    <StreamingText buffer={buffer} />
  *    <button onClick={refresh} disabled={!done}>Refresh</button>
+ *    <button onClick={cancel} disabled={done}>Cancel</button>
  *  </div>
  * )
  * ```
@@ -130,7 +131,9 @@ export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"
  *
  * @example
  * ```tsx
- * <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
+ * return (
+ *  <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
+ * );
  * ```
  */
 export const StreamingTextURL: FC<StreamingTextURLProps> = ({
