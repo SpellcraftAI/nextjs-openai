@@ -1,6 +1,6 @@
 {
   "name": "nextjs-openai",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -61,5 +61,6 @@
     "typescript",
     "streams",
     "gpt-3"
-  ]
+  ],
+  "homepage": "https://github.com/gptlabs/nextjs-openai"
 }
