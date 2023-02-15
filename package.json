@@ -49,5 +49,16 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "yield-stream": "^1.0.0"
-  }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "nextjs",
+    "openai",
+    "react",
+    "typescript",
+    "streams",
+    "gpt-3"
+  ]
 }
