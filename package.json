@@ -13,6 +13,7 @@
   },
   "scripts": {
     "export": "tsmodule build",
+    "docs": "yarn typedoc src",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

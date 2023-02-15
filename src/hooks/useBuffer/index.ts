@@ -5,11 +5,22 @@ import { State, streamState } from "./state";
 /**
  * Custom hook that updates with the current token buffer.
  *
- * @note Thanks to GPT for guidance on AbortControllers and fucked up state
- * logic.
+ * @category Hooks
+ *
+ * @example
+ * ```tsx
+ * const { buffer, done, refresh } = useBuffer(url, 500);
+ * // ...
+ * ```
  */
 export const useBuffer = (
+  /**
+   * The URL to fetch the token stream from.
+   */
   url: string,
+  /**
+   * The debounce time in milliseconds. Defaults to `0`.
+   */
   delay = 0
 ) => {
   const initialState: State = {

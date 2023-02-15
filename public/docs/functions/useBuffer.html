@@ -21,16 +21,20 @@
 <li class="tsd-description">
 <div class="tsd-comment tsd-typography"><p>Custom hook that updates with the current token buffer.</p>
 
-<h3>Note</h3><p>Thanks to GPT for guidance on AbortControllers and fucked up state
-logic.</p>
+<h3>Example</h3><pre><code class="language-tsx"><span class="hl-0">const</span><span class="hl-1"> { </span><span class="hl-2">buffer</span><span class="hl-1">, </span><span class="hl-2">done</span><span class="hl-1">, </span><span class="hl-2">refresh</span><span class="hl-1"> } = </span><span class="hl-3">useBuffer</span><span class="hl-1">(</span><span class="hl-4">url</span><span class="hl-1">, </span><span class="hl-5">500</span><span class="hl-1">);</span><br/><span class="hl-12">// ...</span>
+</code></pre>
 </div>
 <div class="tsd-parameters">
 <h4 class="tsd-parameters-title">Parameters</h4>
 <ul class="tsd-parameter-list">
 <li>
-<h5>url: <span class="tsd-signature-type">string</span></h5></li>
+<h5>url: <span class="tsd-signature-type">string</span></h5>
+<div class="tsd-comment tsd-typography"><p>The URL to fetch the token stream from.</p>
+</div></li>
 <li>
-<h5>delay: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5></li></ul></div>
+<h5>delay: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></h5>
+<div class="tsd-comment tsd-typography"><p>The debounce time in milliseconds. Defaults to <code>0</code>.</p>
+</div></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span><br/><span>    </span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>cancel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>done<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span>refresh<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span></h4>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
@@ -54,7 +58,7 @@ logic.</p>
 <li class="tsd-description">
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4></li></ul></li></ul></li></ul><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/ctjlewis/nextjs-openai/blob/3e6feee/src/hooks/useBuffer/index.ts#L11">src/hooks/useBuffer/index.ts:11</a></li></ul></aside></li></ul></section></div>
+<li>Defined in <a href="https://github.com/ctjlewis/nextjs-openai/blob/0f7b28c/src/hooks/useBuffer/index.ts#L16">src/hooks/useBuffer/index.ts:16</a></li></ul></aside></li></ul></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -78,8 +82,8 @@ logic.</p>
 <ul></ul></li></ul></div></details></nav>
 <nav class="tsd-navigation secondary menu-sticky">
 <ul>
-<li class="tsd-kind-interface"><a href="../interfaces/StreamingTextURLProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg>Streaming<wbr/>TextURLProps</a></li>
-<li class="tsd-kind-type-alias"><a href="../types/StreamingTextProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-4194304-path"></rect><path d="M11.31 16V8.224H8.91V7.24H14.79V8.224H12.39V16H11.31Z" fill="var(--color-text)" id="icon-4194304-text"></path></svg>Streaming<wbr/>Text<wbr/>Props</a></li>
+<li class="tsd-kind-interface"><a href="../interfaces/StreamingTextProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg>Streaming<wbr/>Text<wbr/>Props</a></li>
+<li class="tsd-kind-interface"><a href="../interfaces/StreamingTextURLProps.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-256-path"></use><use href="#icon-256-text"></use></svg>Streaming<wbr/>TextURLProps</a></li>
 <li class="tsd-kind-function"><a href="StreamingText.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-function)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-64-path"></rect><path d="M9.39 16V7.24H14.55V8.224H10.446V11.128H14.238V12.112H10.47V16H9.39Z" fill="var(--color-text)" id="icon-64-text"></path></svg>Streaming<wbr/>Text</a></li>
 <li class="tsd-kind-function"><a href="StreamingTextURL.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>Streaming<wbr/>TextURL</a></li>
 <li class="current tsd-kind-function"><a href="useBuffer.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-64-path"></use><use href="#icon-64-text"></use></svg>use<wbr/>Buffer</a></li>

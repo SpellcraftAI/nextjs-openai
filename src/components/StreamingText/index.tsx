@@ -11,15 +11,39 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useTextBuffer } from "../../hooks";
 
-export type StreamingTextProps = {
+export interface StreamingTextProps {
+  /**
+   * The buffer of all text chunks received so far, updated as new chunks are
+   * received.
+   */
   buffer: string[];
+  /**
+   * The HTML element to render the text as. Defaults to `p`.
+   */
   as?: keyof JSX.IntrinsicElements;
+  /**
+   * The duration of the fade-in animation in milliseconds. Defaults to 600.
+   */
   fade?: number;
-};
+}
 
 /**
  * StreamingText renders the chunks of an updating buffer of text with a fade-in
  * animation.
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * const { buffer, done, refresh } = useTextBuffer(url, 500);
+ *
+ * return (
+ *  <div>
+ *    <StreamingText buffer={buffer} />
+ *    <button onClick={refresh} disabled={!done}>Refresh</button>
+ *  </div>
+ * )
+ * ```
  */
 export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
@@ -89,18 +113,31 @@ export const StreamingText: FC<StreamingTextProps> = ({
 };
 
 export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"> {
+  /**
+   * The URL to fetch the text stream from.
+   */
   url: string;
-  throttle?: number;
+  /**
+   * The debounce time in milliseconds. Defaults to 100.
+   */
+  debounce?: number;
 }
 
 /**
  * Wrapper around `<StreamingText>` that fetches the text stream from a URL.
+ *
+ * @category Components
+ *
+ * @example
+ * ```tsx
+ * <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
+ * ```
  */
 export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   url,
-  throttle = 100,
+  debounce = 100,
   ...props
 }) => {
-  const { buffer } = useTextBuffer(url, throttle);
+  const { buffer } = useTextBuffer(url, debounce);
   return <StreamingText buffer={buffer} {...props} />;
 };

@@ -5,14 +5,31 @@ import { useBuffer } from "../useBuffer";
 /**
  * Custom hook that updates with the current token buffer.
  *
- * @note Thanks to GPT for guidance on AbortControllers and fucked up state
- * logic.
+ * @example
+ * ```tsx
+ * const { buffer, done, refresh } = useTextBuffer(url, 500);
+ *
+ * return (
+ *  <div>
+ *    <StreamingText buffer={buffer} />
+ *    <button onClick={refresh} disabled={!done}>Refresh</button>
+ *  </div>
+ * )
+ * ```
+ *
+ * @category Hooks
  */
 export const useTextBuffer = (
+  /**
+   * The URL to fetch the token stream from.
+   */
   url: string,
-  throttle = 0,
+  /**
+   * The debounce time in milliseconds. Defaults to `0`.
+   */
+  debounce = 0,
 ) => {
-  const { buffer, ...hooks } = useBuffer(url, throttle);
+  const { buffer, ...hooks } = useBuffer(url, debounce);
   const [textBuffer, setTextBuffer] = useState<string[]>([]);
 
   useEffect(
