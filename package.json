@@ -15,6 +15,7 @@
     "export": "tsmodule build",
     "docs": "yarn typedoc src",
     "dev": "next dev",
+    "prebuild": "yarn docs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",

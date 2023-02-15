@@ -14,3 +14,5 @@ dist/
 .env.*
 
 yarn-error.log
+
+public/docs
