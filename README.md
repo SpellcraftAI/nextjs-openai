@@ -32,3 +32,32 @@ return (
   <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
 );
 ```
+
+### Edge Runtime
+
+This library uses `openai-streams` to handle streaming logic. You can use it
+with Edge Runtime like so:
+
+```ts
+// src/pages/api/demo.ts
+import { OpenAI } from "openai-streams";
+
+export default async function demo() {
+  const config = {
+    model: "text-davinci-003",
+    prompt: "Write a two-sentence paragraph.\n\n",
+    temperature: 1,
+    max_tokens: 100,
+  };
+
+  const completionsStream = await OpenAI("completions", config);
+  return new Response(completionsStream);
+}
+
+export const config = {
+  runtime: "edge",
+};
+```
+
+This relies on the WHATWG `ReadableStream` being available (18+), so Edge
+Runtime is required.
