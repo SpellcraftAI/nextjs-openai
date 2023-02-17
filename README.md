@@ -1,6 +1,7 @@
 # OpenAI for Next.js
 
 [**Github**](https://github.com/gptlabs/nextjs-openai)
+[**NPM**](https://npmjs.com/package/nextjs-openai)
 [**Demo**](https://nextjs-openai.vercel.app)
 [**Docs**](https://nextjs-openai.vercel.app/docs)
 
