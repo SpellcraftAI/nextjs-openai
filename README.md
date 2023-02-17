@@ -1,8 +1,8 @@
 # OpenAI for Next.js
 
-<sub>[**Github**](https://github.com/gptlabs/nextjs-openai)</sub>
-<sub>[**Demo**](https://nextjs-openai.vercel.app)</sub>
-<sub>[**Docs**](https://nextjs-openai.vercel.app/docs)</sub>
+[**Github**](https://github.com/gptlabs/nextjs-openai)
+[**Demo**](https://nextjs-openai.vercel.app)
+[**Docs**](https://nextjs-openai.vercel.app/docs)
 
 Adds hooks and components for working with OpenAI streams.
 
