@@ -1,9 +1,23 @@
 # OpenAI for Next.js
 
-- **Demo: https://nextjs-openai.vercel.app**
-- **Docs: https://nextjs-openai.vercel.app/docs**
+<sub>[**Github**](https://github.com/gptlabs/nextjs-openai)</sub>
+<sub>[**Demo**](https://nextjs-openai.vercel.app)</sub>
+<sub>[**Docs**](https://nextjs-openai.vercel.app/docs)</sub>
 
 Adds hooks and components for working with OpenAI streams.
+
+### Requirements
+
+Only available in Edge runtime (or Node >18) due to reliance on WHATWG
+`ReadableStream`. See **Edge Runtime** below for an example.
+
+### Installation
+
+```bash
+yarn add nextjs-openai
+# - or -
+npm i --save nextjs-openai
+```
 
 ### Hooks
 
