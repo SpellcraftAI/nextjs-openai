@@ -26,15 +26,19 @@ npm i --save nextjs-openai
 data (and text) from a given URL.
 
 ```tsx
-const { buffer, refresh, cancel, done } = useTextBuffer(url, 200);
- 
-return (
-  <div>
-    <StreamingText buffer={buffer} fade={600} />
-    <button onClick={refresh} disabled={!done}>Refresh</button>
-    <button onClick={cancel} disabled={done}>Cancel</button>
-  </div>
-)
+import { useTextBuffer } from "nextjs-openai";
+
+export default function Demo() {
+  const { buffer, refresh, cancel, done } = useTextBuffer(url, 200);
+  
+  return (
+    <div>
+      <StreamingText buffer={buffer} fade={600} />
+      <button onClick={refresh} disabled={!done}>Refresh</button>
+      <button onClick={cancel} disabled={done}>Cancel</button>
+    </div>
+  );
+}
 ```
 
 ### Components
@@ -43,9 +47,13 @@ return (
 using a fade-in animation.
 
 ```tsx
-return (
-  <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
-);
+import { StreamingTextURL } from "nextjs-openai";
+
+export default function Demo() {
+  return (
+    <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
+  );
+}
 ```
 
 ### Edge Runtime
