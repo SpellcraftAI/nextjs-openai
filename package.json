@@ -1,6 +1,6 @@
 {
   "name": "nextjs-openai",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -19,7 +19,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
-    "pretest": "tsmodule build --runtime-only",
+    "pretest": "tsmodule build",
     "test": "ava",
     "prepublishOnly": "yarn export && yarn test"
   },
