@@ -1,6 +1,6 @@
 {
   "name": "nextjs-openai",
-  "version": "1.2.13",
+  "version": "1.2.14",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -61,5 +61,6 @@
     "streams",
     "gpt-3"
   ],
+  "description": "Hooks and components for working with OpenAI streams.",
   "homepage": "https://github.com/gptlabs/nextjs-openai"
 }
