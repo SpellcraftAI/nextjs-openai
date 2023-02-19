@@ -16,7 +16,9 @@ Only available in **Edge runtime** (or **Node 18+**) due to reliance on WHATWG
 
 ```bash
 yarn add nextjs-openai
-# - or -
+
+# -or-
+
 npm i --save nextjs-openai
 ```
 
