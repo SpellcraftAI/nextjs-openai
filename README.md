@@ -7,7 +7,7 @@
 
 Adds hooks and components for working with OpenAI streams.
 
-<img width="400" src="public/nextjs-openai-demo.gif">
+<img width="600" src="https://github.com/gptlabs/nextjs-openai/raw/master/public/nextjs-openai-demo.gif">
 
 ### Requirements
 
