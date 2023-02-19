@@ -10,7 +10,7 @@ Adds hooks and components for working with OpenAI streams.
 ### Requirements
 
 Only available in **Edge runtime** (or **Node 18+**) due to reliance on WHATWG
-`ReadableStream`. See **Edge Runtime** below for an example.
+`ReadableStream`. See [**Edge Runtime**](#edge-runtime) below for an example.
 
 ### Installation
 
