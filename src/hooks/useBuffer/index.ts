@@ -19,9 +19,9 @@ export const useBuffer = (
    */
   url: string,
   /**
-   * The debounce time in milliseconds. Defaults to `0`.
+   * Time (in ms) to throttle updates by. Defaults to `0`.
    */
-  delay = 0
+  throttle = 0
 ) => {
   const initialState: State = {
     done: false,
@@ -76,7 +76,9 @@ export const useBuffer = (
           }
 
           const stream = yieldStream(response.body, newController);
-          animation = requestAnimationFrame(() => streamChunks(stream, delay));
+          animation = requestAnimationFrame(
+            () => streamChunks(stream, throttle)
+          );
         } catch (error) {
           if (error instanceof DOMException && error.name === "AbortError") {
             // The stream was cancelled.
@@ -92,7 +94,7 @@ export const useBuffer = (
       };
 
     },
-    [refreshCount, url, delay, streamChunks]
+    [refreshCount, url, throttle, streamChunks]
   );
 
   return {

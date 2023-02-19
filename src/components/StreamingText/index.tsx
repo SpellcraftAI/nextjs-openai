@@ -119,9 +119,9 @@ export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"
    */
   url: string;
   /**
-   * The debounce time in milliseconds. Defaults to 100.
+   * Time (in ms) to throttle updates by.
    */
-  debounce?: number;
+  throttle?: number;
 }
 
 /**
@@ -138,9 +138,9 @@ export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"
  */
 export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   url,
-  debounce = 100,
+  throttle: throttle = 100,
   ...props
 }) => {
-  const { buffer } = useTextBuffer(url, debounce);
+  const { buffer } = useTextBuffer(url, throttle);
   return <StreamingText buffer={buffer} {...props} />;
 };
