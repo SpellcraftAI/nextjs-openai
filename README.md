@@ -7,6 +7,8 @@
 
 Adds hooks and components for working with OpenAI streams.
 
+<img width="100%" style="max-width: 400px" src="public/nextjs-openai-demo.gif">
+
 ### Requirements
 
 Only available in **Edge runtime** (or **Node 18+**) due to reliance on WHATWG
