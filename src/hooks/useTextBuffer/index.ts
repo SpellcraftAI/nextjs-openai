@@ -26,11 +26,11 @@ export const useTextBuffer = (
    */
   url: string,
   /**
-   * The debounce time in milliseconds. Defaults to `0`.
+   * Time (in ms) to throttle updates by. Defaults to `0`.
    */
-  debounce = 0,
+  throttle = 0,
 ) => {
-  const { buffer, ...hooks } = useBuffer(url, debounce);
+  const { buffer, ...hooks } = useBuffer(url, throttle);
   const [textBuffer, setTextBuffer] = useState<string[]>([]);
 
   useEffect(
