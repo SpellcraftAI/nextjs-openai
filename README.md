@@ -58,12 +58,13 @@ export default function Demo() {
 
 ### Edge Runtime
 
-This library uses `openai-streams` to handle streaming logic. You can use it
-with Edge Runtime like so:
+This library uses `openai-streams` to handle streaming logic, and re-exports it
+so you don't need to add a second dependency. You can use it with Edge Runtime
+like so:
 
 ```ts
 // src/pages/api/demo.ts
-import { OpenAI } from "openai-streams";
+import { OpenAI } from "nextjs-openai";
 
 export default async function demo() {
   const config = {
