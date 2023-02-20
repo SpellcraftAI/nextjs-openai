@@ -1,4 +1,4 @@
-import { OpenAI } from "../..";
+import { OpenAI } from "openai-streams";
 
 export default async function test() {
   const completionsStream = await OpenAI(
