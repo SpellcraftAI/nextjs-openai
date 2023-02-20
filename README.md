@@ -32,7 +32,7 @@ data (and text) from a given URL.
 import { useTextBuffer } from "openai-streams";
 
 export default function Demo() {
-  const { buffer, refresh, cancel, done } = useTextBuffer(url, 200);
+  const { buffer, refresh, cancel, done } = useTextBuffer({ url: "/api/demo" });
   
   return (
     <div>
@@ -54,7 +54,51 @@ import { StreamingTextURL } from "nextjs-openai";
 
 export default function Demo() {
   return (
-    <StreamingTextURL url="/api/demo" fade={600} throttle={100} />
+    <StreamingTextURL 
+      url="/api/demo" 
+      fade={600} 
+      throttle={100} 
+    />
+  );
+}
+```
+
+### Sending data and advanced usage
+
+If you would like to change the type of network request made with
+`<StreamingTextURL>` or the `useBuffer()` and `useTextBuffer()` hooks, you can
+set the `{ method, data }` options.
+
+<sub>See
+[`src/pages/index.tsx`](https://github.com/gptlabs/nextjs-openai/blob/master/src/pages/index.tsx)
+for a live example.</sub>
+
+#### With `<StreamingTextURL>`
+
+```tsx
+export default function Home() {
+  const [data, setData] = useState({ name: "John" });
+  // ...
+  return (
+    <StreamingTextURL url="/api/demo" data={data}>
+  );
+}
+```
+
+#### With `useTextBuffer()`
+
+```tsx
+export default function Home() {
+  const [data, setData] = useState({ name: "John" });
+  const { buffer, refresh, cancel } = useTextBuffer({
+    url: "/api/demo",
+    throttle: 100,
+    method: "POST",
+    data,
+  });
+  // ...
+  return (
+    <StreamingText buffer={buffer}>
   );
 }
 ```

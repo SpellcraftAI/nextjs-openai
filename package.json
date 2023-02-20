@@ -22,7 +22,8 @@
     "lint": "next lint --fix",
     "pretest": "tsmodule build",
     "test": "ava",
-    "prepublishOnly": "yarn export && yarn test"
+    "prepublishOnly": "yarn export && yarn test",
+    "canary": "yarn build && yarn version --prerelease --preid=canary && npm publish --tag canary"
   },
   "devDependencies": {
     "@tsmodule/react": "^12.0.0",

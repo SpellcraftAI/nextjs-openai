@@ -10,6 +10,7 @@
 
 import { FC, useEffect, useRef, useState } from "react";
 import { useTextBuffer } from "../../hooks";
+import { FetchBufferOptions } from "../../hooks/types";
 
 export interface StreamingTextProps {
   /**
@@ -113,19 +114,14 @@ export const StreamingText: FC<StreamingTextProps> = ({
   );
 };
 
-export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"> {
-  /**
-   * The URL to fetch the text stream from.
-   */
-  url: string;
-  /**
-   * Time (in ms) to throttle updates by.
-   */
-  throttle?: number;
-}
+export type StreamingTextURLProps = Omit<StreamingTextProps, "buffer"> & FetchBufferOptions;
 
 /**
  * Wrapper around `<StreamingText>` that fetches the text stream from a URL.
+ *
+ * If you need to be able to refresh or cancel this stream, use `const { buffer,
+ * refresh, cancel } = useTextBuffer()` alongside `<StreamingText
+ * buffer={buffer}>` instead.
  *
  * @category Components
  *
@@ -137,10 +133,16 @@ export interface StreamingTextURLProps extends Omit<StreamingTextProps, "buffer"
  * ```
  */
 export const StreamingTextURL: FC<StreamingTextURLProps> = ({
-  url,
-  throttle: throttle = 100,
-  ...props
+  as,
+  fade,
+  ...bufferOptions
 }) => {
-  const { buffer } = useTextBuffer(url, throttle);
-  return <StreamingText buffer={buffer} {...props} />;
+  const { buffer } = useTextBuffer(bufferOptions);
+  return (
+    <StreamingText
+      buffer={buffer}
+      fade={fade}
+      as={as}
+    />
+  );
 };
