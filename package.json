@@ -1,16 +1,21 @@
 {
   "name": "nextjs-openai",
-  "version": "1.3.3",
+  "version": "1.3.4-canary.0",
   "license": "MIT",
   "type": "module",
   "files": [
     "dist"
   ],
-  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    ".": "./dist/index.js",
-    "./*": "./dist/*/index.js"
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": {
+      "default": "./dist/*/index.js",
+      "types": "./dist/*/index.d.ts"
+    }
   },
   "scripts": {
     "export": "tsmodule build",
