@@ -7,21 +7,20 @@
 
 Adds hooks and components for working with OpenAI streams.
 
-<img width="600" src="https://github.com/gptlabs/nextjs-openai/raw/master/public/nextjs-openai-demo.gif">
-
-### Requirements
-
-Only available in **Edge runtime** (or **Node 18+**) due to reliance on WHATWG
-`ReadableStream`. See [**Edge Runtime**](#edge-runtime) below for an example.
+<img width="600"
+src="https://github.com/gptlabs/nextjs-openai/raw/master/public/nextjs-openai-demo.gif">
 
 ### Installation
 
+`nextjs-openai` includes frontend tools, and `openai-streams` includes tools for
+working with streams in Node 18+ and Edge runtime.
+
 ```bash
-yarn add nextjs-openai
+yarn add nextjs-openai openai-streams
 
 # -or-
 
-npm i --save nextjs-openai
+npm i --save nextjs-openai openai-streams
 ```
 
 ### Hooks
@@ -30,7 +29,7 @@ npm i --save nextjs-openai
 data (and text) from a given URL.
 
 ```tsx
-import { useTextBuffer } from "nextjs-openai";
+import { useTextBuffer } from "openai-streams";
 
 export default function Demo() {
   const { buffer, refresh, cancel, done } = useTextBuffer(url, 200);
@@ -62,9 +61,7 @@ export default function Demo() {
 
 ### Edge Runtime
 
-This library re-exports
-[`openai-streams`](https://github.com/gptlabs/openai-streams) for convenience.
-Use it like so:
+Use `openai-streams` to consume streams from your API routes.
 
 ```ts
 // src/pages/api/demo.ts
