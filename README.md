@@ -63,6 +63,36 @@ export default function Demo() {
 }
 ```
 
+### Next.js Edge Runtime
+
+Use `openai-streams` to consume streams from your API routes.
+
+```ts
+// src/pages/api/demo.ts
+import { OpenAI } from "openai-streams";
+
+export default async function demo() {
+  const config = {
+    model: "text-davinci-003",
+    prompt: "Write a two-sentence paragraph.\n\n",
+    temperature: 1,
+    max_tokens: 100,
+  };
+
+  const completionsStream = await OpenAI("completions", config);
+  return new Response(completionsStream);
+}
+
+export const config = {
+  runtime: "edge",
+};
+```
+
+This relies on the WHATWG `ReadableStream` being available (18+), so Edge
+Runtime is required.
+
+
+
 ### Sending data and advanced usage
 
 If you would like to change the type of network request made with
@@ -104,31 +134,3 @@ export default function Home() {
   );
 }
 ```
-
-### Edge Runtime
-
-Use `openai-streams` to consume streams from your API routes.
-
-```ts
-// src/pages/api/demo.ts
-import { OpenAI } from "openai-streams";
-
-export default async function demo() {
-  const config = {
-    model: "text-davinci-003",
-    prompt: "Write a two-sentence paragraph.\n\n",
-    temperature: 1,
-    max_tokens: 100,
-  };
-
-  const completionsStream = await OpenAI("completions", config);
-  return new Response(completionsStream);
-}
-
-export const config = {
-  runtime: "edge",
-};
-```
-
-This relies on the WHATWG `ReadableStream` being available (18+), so Edge
-Runtime is required.
