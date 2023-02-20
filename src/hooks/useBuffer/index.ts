@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useReducer } from "react";
 import { yieldStream } from "yield-stream";
+import { BufferHook } from "../types";
 import { State, streamState } from "./state";
 
 /**
- * Custom hook that updates with the current token buffer.
+ * Fetch a stream from a URL and return the updated buffer as it is received.
  *
  * @category Hooks
  *
@@ -13,16 +14,12 @@ import { State, streamState } from "./state";
  * // ...
  * ```
  */
-export const useBuffer = (
-  /**
-   * The URL to fetch the token stream from.
-   */
-  url: string,
-  /**
-   * Time (in ms) to throttle updates by. Defaults to `0`.
-   */
-  throttle = 0
-) => {
+export const useBuffer: BufferHook = ({
+  url,
+  throttle = 0,
+  method = "POST",
+  data = null,
+}) => {
   const initialState: State = {
     done: false,
     buffer: [],
@@ -33,7 +30,6 @@ export const useBuffer = (
 
   const [state, dispatch] = useReducer(streamState, initialState);
   const { done, buffer, refreshCount } = state;
-
 
   const streamChunks = useCallback(
     async (
@@ -69,7 +65,17 @@ export const useBuffer = (
       (async () => {
         try {
           const { signal } = newController;
-          const response = await fetch(url, { signal });
+          const response = await fetch(
+            url,
+            {
+              signal,
+              method,
+              body:
+                method === "POST" && data
+                  ? JSON.stringify(data)
+                  : undefined,
+            }
+          );
 
           if (!response.body) {
             throw new Error(`Failed to load response from URL: ${url}`);
@@ -94,7 +100,7 @@ export const useBuffer = (
       };
 
     },
-    [refreshCount, url, throttle, streamChunks]
+    [refreshCount, url, throttle, streamChunks, method, data]
   );
 
   return {

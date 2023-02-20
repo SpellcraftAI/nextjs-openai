@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DECODER } from "../../globs/shared";
+import { BufferHook } from "../types";
 import { useBuffer } from "../useBuffer";
 
 /**
@@ -20,17 +21,8 @@ import { useBuffer } from "../useBuffer";
  *
  * @category Hooks
  */
-export const useTextBuffer = (
-  /**
-   * The URL to fetch the token stream from.
-   */
-  url: string,
-  /**
-   * Time (in ms) to throttle updates by. Defaults to `0`.
-   */
-  throttle = 0,
-) => {
-  const { buffer, ...hooks } = useBuffer(url, throttle);
+export const useTextBuffer: BufferHook<string> = (args) => {
+  const { buffer, ...hooks } = useBuffer(args);
   const [textBuffer, setTextBuffer] = useState<string[]>([]);
 
   useEffect(
