@@ -69,6 +69,9 @@ If you would like to change the type of network request made with
 `<StreamingTextURL>` or the `useBuffer()` and `useTextBuffer()` hooks, you can
 set the `{ method, data }` options.
 
+`{ data }` is sent as the POST request body by default. To use a GET request,
+set `{ method = "GET" }` and manually set the URL search params on `{ url }`.
+
 <sub>See
 [`src/pages/index.tsx`](https://github.com/gptlabs/nextjs-openai/blob/master/src/pages/index.tsx)
 for a live example.</sub>
@@ -93,7 +96,6 @@ export default function Home() {
   const { buffer, refresh, cancel } = useTextBuffer({
     url: "/api/demo",
     throttle: 100,
-    method: "POST",
     data,
   });
   // ...
