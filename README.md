@@ -65,7 +65,7 @@ Use `openai-streams` to consume streams from your API routes.
 
 ```ts
 // src/pages/api/demo.ts
-import { OpenAI } from "nextjs-openai/streams";
+import { OpenAI } from "openai-streams";
 
 export default async function demo() {
   const config = {
