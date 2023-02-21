@@ -8,11 +8,11 @@
  * simple use case, especially for Safari. We did the best we could.
  */
 
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
 import { useTextBuffer } from "../../hooks";
 import { FetchBufferOptions } from "../../hooks/types";
 
-export interface StreamingTextProps {
+export interface StreamingTextProps extends HTMLAttributes<HTMLElement> {
   /**
    * The buffer of all text chunks received so far, updated as new chunks are
    * received.
@@ -51,6 +51,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
   as: ElementType = "p",
   fade = 600,
+  ...props
 }) => {
   const text = buffer.join("");
   const empty = buffer.length === 0 || text.trim() === "";
@@ -108,7 +109,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
 
   return (
     // @ts-ignore - ref any
-    <ElementType ref={textRef}>
+    <ElementType ref={textRef} {...props}>
       {empty ? <>&shy;</> : fadedChunks}
     </ElementType>
   );
@@ -135,14 +136,19 @@ export type StreamingTextURLProps = Omit<StreamingTextProps, "buffer"> & FetchBu
 export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   as,
   fade,
-  ...bufferOptions
+  url,
+  throttle,
+  data,
+  method,
+  ...props
 }) => {
-  const { buffer } = useTextBuffer(bufferOptions);
+  const { buffer } = useTextBuffer({ url, throttle, data, method });
   return (
     <StreamingText
       buffer={buffer}
       fade={fade}
       as={as}
+      {...props}
     />
   );
 };
