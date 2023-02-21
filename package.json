@@ -1,6 +1,6 @@
 {
   "name": "nextjs-openai",
-  "version": "3.0.3",
+  "version": "3.0.5",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "eventsource-parser": "^0.1.0",
-    "openai-streams": "^1.0.20",
+    "openai-streams": "^1.0.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "yield-stream": "^2.0.4"
