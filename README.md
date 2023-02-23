@@ -13,7 +13,7 @@ src="https://github.com/gptlabs/nextjs-openai/raw/master/public/nextjs-openai-de
 ### Installation
 
 `nextjs-openai` includes frontend tools, and `openai-streams` includes tools for
-working with streams in Node 18+ and Edge runtime.
+working with OpenAI streams in your API Routes.
 
 ```bash
 yarn add nextjs-openai openai-streams
@@ -63,35 +63,55 @@ export default function Demo() {
 }
 ```
 
-### Next.js Edge Runtime
+### API Routes
 
-Use `openai-streams` to consume streams from your API routes.
+Use `openai-streams` to work with streams in your API Routes.
+
+#### Edge Runtime
 
 ```ts
-// src/pages/api/demo.ts
 import { OpenAI } from "openai-streams";
 
-export default async function demo() {
-  const config = {
-    model: "text-davinci-003",
-    prompt: "Write a two-sentence paragraph.\n\n",
-    temperature: 1,
-    max_tokens: 100,
-  };
+export default async function handler() {
+  const stream = await OpenAI(
+    "completions",
+    {
+      model: "text-davinci-003",
+      prompt: "Write a happy sentence.\n\n",
+      max_tokens: 25
+    },
+  );
 
-  const completionsStream = await OpenAI("completions", config);
-  return new Response(completionsStream);
+  return new Response(stream);
 }
 
 export const config = {
-  runtime: "edge",
+  runtime: "edge"
 };
 ```
 
-This relies on the WHATWG `ReadableStream` being available (18+), so Edge
-Runtime is required.
+#### Node <18
 
+If you are not using Edge Runtime, import the `NodeJS.Readable` version from
+`openai-streams/node`.
 
+```ts
+import type { NextApiRequest, NextApiResponse } from "next";
+import { OpenAI } from "openai-streams/node";
+
+export default async function test (_: NextApiRequest, res: NextApiResponse) {
+  const stream = await OpenAI(
+    "completions",
+    {
+      model: "text-davinci-003",
+      prompt: "Write a happy sentence.\n\n",
+      max_tokens: 25
+    }
+  );
+
+  stream.pipe(res);
+}
+```
 
 ### Sending data and advanced usage
 
