@@ -29,7 +29,7 @@ npm i --save nextjs-openai openai-streams
 data (and text) from a given URL.
 
 ```tsx
-import { useTextBuffer } from "openai-streams";
+import { useTextBuffer } from "nextjs-openai";
 
 export default function Demo() {
   const { buffer, refresh, cancel, done } = useTextBuffer({ url: "/api/demo" });
@@ -59,6 +59,52 @@ export default function Demo() {
       fade={600} 
       throttle={100} 
     />
+  );
+}
+```
+
+### Sending data and advanced usage
+
+If you would like to change the type of network request made with
+`<StreamingTextURL>` or the `useBuffer()` and `useTextBuffer()` hooks, you can
+set the `{ method, data }` options.
+
+`{ data }` is sent as the POST request body by default. To use a GET request,
+set `{ method = "GET" }` and manually set the URL search params on `{ url }`.
+
+<sub>See
+[`src/pages/index.tsx`](https://github.com/gptlabs/nextjs-openai/blob/master/src/pages/index.tsx)
+for a live example.</sub>
+
+#### With `<StreamingTextURL>`
+
+```tsx
+import { StreamingTextURL } from "nextjs-openai";
+
+export default function Home() {
+  const [data, setData] = useState({ name: "John" });
+  // ...
+  return (
+    <StreamingTextURL url="/api/demo" data={data}>
+  );
+}
+```
+
+#### With `useTextBuffer()`
+
+```tsx
+import { useTextBuffer, StreamingText } from "nextjs-openai";
+
+export default function Home() {
+  const [data, setData] = useState({ name: "John" });
+  const { buffer, refresh, cancel } = useTextBuffer({
+    url: "/api/demo",
+    throttle: 100,
+    data,
+  });
+  // ...
+  return (
+    <StreamingText buffer={buffer}>
   );
 }
 ```
@@ -110,47 +156,5 @@ export default async function test (_: NextApiRequest, res: NextApiResponse) {
   );
 
   stream.pipe(res);
-}
-```
-
-### Sending data and advanced usage
-
-If you would like to change the type of network request made with
-`<StreamingTextURL>` or the `useBuffer()` and `useTextBuffer()` hooks, you can
-set the `{ method, data }` options.
-
-`{ data }` is sent as the POST request body by default. To use a GET request,
-set `{ method = "GET" }` and manually set the URL search params on `{ url }`.
-
-<sub>See
-[`src/pages/index.tsx`](https://github.com/gptlabs/nextjs-openai/blob/master/src/pages/index.tsx)
-for a live example.</sub>
-
-#### With `<StreamingTextURL>`
-
-```tsx
-export default function Home() {
-  const [data, setData] = useState({ name: "John" });
-  // ...
-  return (
-    <StreamingTextURL url="/api/demo" data={data}>
-  );
-}
-```
-
-#### With `useTextBuffer()`
-
-```tsx
-export default function Home() {
-  const [data, setData] = useState({ name: "John" });
-  const { buffer, refresh, cancel } = useTextBuffer({
-    url: "/api/demo",
-    throttle: 100,
-    data,
-  });
-  // ...
-  return (
-    <StreamingText buffer={buffer}>
-  );
 }
 ```
