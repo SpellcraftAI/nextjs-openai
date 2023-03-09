@@ -10,6 +10,7 @@ export type Action =
   | { type: "cancel" }
   | { type: "refresh" }
   | { type: "add"; payload: Uint8Array }
+  | { type: "done" }
   | { type: "setController"; payload: AbortController };
 
 export const streamState = (prevState: State, action: Action) => {
@@ -37,6 +38,12 @@ export const streamState = (prevState: State, action: Action) => {
       return {
         ...prevState,
         buffer: prevState.buffer.concat(action.payload),
+      };
+
+    case "done":
+      return {
+        ...prevState,
+        done: true,
       };
 
     case "setController":

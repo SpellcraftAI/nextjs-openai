@@ -49,6 +49,7 @@ export const useBuffer: BufferHook = ({
           lastUpdateTime = Date.now();
         }
       }
+      dispatch({ type: "done" });
     },
     [dispatch]
   );
