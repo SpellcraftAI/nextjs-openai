@@ -7,12 +7,15 @@ import { useTextBuffer } from "../hooks";
 export default function Home() {
   const nameRef = useRef<HTMLInputElement>(null);
   const [data, setData] = useState({ name: "John" });
-  const { buffer, refresh, cancel } = useTextBuffer({
+  const { buffer, done, refresh, cancel } = useTextBuffer({
     url: "/api/demo",
     throttle: 100,
     method: "POST",
     data,
   });
+
+  // eslint-disable-next-line no-console
+  console.log({ buffer, done });
 
   useEffect(
     () => {
