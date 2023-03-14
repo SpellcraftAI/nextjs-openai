@@ -78,7 +78,7 @@ export const useBuffer: BufferHook = ({
             }
           );
 
-          if (!response.body) {
+          if (!response.ok || !response.body) {
             throw new Error(`Failed to load response from URL: ${url}`);
           }
 
