@@ -15,6 +15,10 @@ export type FetchBufferOptions = {
    * HTTP method to use. Defaults to `POST`.
    */
   method?: "POST" | "GET";
+  /**
+   * Type of response that you get from your endpoint. Defaults to `plaintext`.
+   */
+  responseType?: "plaintext" | "chat";
 };
 
 export type BufferHook<T = Uint8Array> = (options: FetchBufferOptions) => {

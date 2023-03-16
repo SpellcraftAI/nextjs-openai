@@ -140,9 +140,17 @@ export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   throttle,
   data,
   method,
+  responseType,
   ...props
 }) => {
-  const { buffer } = useTextBuffer({ url, throttle, data, method });
+  const { buffer } = useTextBuffer({
+    url,
+    throttle,
+    data,
+    method,
+    responseType
+  });
+
   return (
     <StreamingText
       buffer={buffer}
