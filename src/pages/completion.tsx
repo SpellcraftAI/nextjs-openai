@@ -8,7 +8,7 @@ export default function Home() {
   const nameRef = useRef<HTMLInputElement>(null);
   const [data, setData] = useState({ name: "John" });
   const { buffer, done, refresh, cancel } = useTextBuffer({
-    url: "/api/chat",
+    url: "/api/completion",
     throttle: 100,
     method: "POST",
     data,
