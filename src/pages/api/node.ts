@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { OpenAI } from "openai-streams/node";
+import { OpenAI } from "openai-streams";
+import { Readable } from "stream";
+import { yieldStream } from "yield-stream";
 
 export default async function demo(req: NextApiRequest, res: NextApiResponse) {
   const { name } = JSON.parse(req.body);
@@ -21,5 +23,5 @@ export default async function demo(req: NextApiRequest, res: NextApiResponse) {
     },
   );
 
-  return res.send(completionsStream);
+  Readable.from(yieldStream(completionsStream)).pipe(res);
 }
