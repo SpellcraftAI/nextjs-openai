@@ -19,6 +19,7 @@ export const useBuffer: BufferHook = ({
   throttle = 0,
   method = "POST",
   data = null,
+  ...props
 }) => {
   const initialState: State = {
     done: false,
@@ -75,6 +76,7 @@ export const useBuffer: BufferHook = ({
                 method === "POST" && data
                   ? JSON.stringify(data)
                   : undefined,
+              ...props,
             }
           );
 
