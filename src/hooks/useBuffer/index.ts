@@ -82,7 +82,14 @@ export const useBuffer: BufferHook = ({
           );
 
           if (!response.ok || !response.body) {
-            throw new Error(`Failed to load response from URL: ${url}`);
+            const errorText = `[${response.status}] ${response.statusText}`;
+
+            if (response.body) {
+              const error = await response.text();
+              throw new Error(`${errorText}\n\n${error}`);
+            } else {
+              throw new Error(errorText);
+            }
           }
 
           const stream = yieldStream(response.body, newController);
