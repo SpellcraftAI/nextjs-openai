@@ -7,7 +7,7 @@ import { useTextBuffer } from "../hooks";
 export default function Home() {
   const nameRef = useRef<HTMLInputElement>(null);
   const [data, setData] = useState({ name: "John" });
-  const { buffer, done, refresh, cancel } = useTextBuffer({
+  const { buffer, done, error, refresh, cancel } = useTextBuffer({
     url: "/api/chat",
     throttle: 100,
     method: "POST",
@@ -15,7 +15,7 @@ export default function Home() {
   });
 
   // eslint-disable-next-line no-console
-  console.log({ buffer, done });
+  console.log({ buffer, done, error });
 
   useEffect(
     () => {

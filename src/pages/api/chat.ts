@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import { OpenAI } from "openai-streams";
 
 export default async function demo(req: NextRequest) {
+  // return new Response("Testing error.", { status: 401 });
+
   const { name } = await req.json();
   if (!name) {
     return new Response(null, { status: 400, statusText: "Did not include `name` parameter" });

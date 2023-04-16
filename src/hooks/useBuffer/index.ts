@@ -91,13 +91,13 @@ export const useBuffer: BufferHook = ({
           );
         } catch (error) {
           if (error instanceof Error) {
-            dispatch({ type: "setError", payload: error });
+            const { name, message } = error;
+            dispatch({ type: "setError", payload: { name, message } });
           }
         }
-      })();
+      })().catch();
 
       return () => {
-        newController.abort();
         cancelAnimationFrame(animation);
       };
     },
