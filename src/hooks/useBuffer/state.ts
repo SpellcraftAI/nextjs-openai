@@ -1,7 +1,10 @@
+import { SerializedError } from "../types";
+
 export type State = {
   done: boolean;
   buffer: Uint8Array[];
   refreshCount: number;
+  error: SerializedError | null;
   aborted: boolean;
   controller: AbortController | null;
 };
@@ -11,6 +14,7 @@ export type Action =
   | { type: "refresh" }
   | { type: "add"; payload: Uint8Array }
   | { type: "done" }
+  | { type: "setError"; payload: SerializedError }
   | { type: "setController"; payload: AbortController };
 
 export const streamState = (prevState: State, action: Action) => {
@@ -44,6 +48,13 @@ export const streamState = (prevState: State, action: Action) => {
       return {
         ...prevState,
         done: true,
+      };
+
+    case "setError":
+      return {
+        ...prevState,
+        done: true,
+        error: action.payload,
       };
 
     case "setController":

@@ -13,9 +13,12 @@ export interface FetchBufferOptions extends RequestInit {
   data?: Parameters<typeof JSON.stringify>[0];
 }
 
+export type SerializedError = { name: string; message: string };
+
 export type BufferHook<T = Uint8Array> = (options: FetchBufferOptions) => {
   buffer: T[];
   done: boolean;
+  error: SerializedError | null;
   refresh: () => void;
   cancel: () => void;
 };

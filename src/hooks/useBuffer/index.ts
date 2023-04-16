@@ -27,10 +27,11 @@ export const useBuffer: BufferHook = ({
     refreshCount: 0,
     aborted: false,
     controller: null,
+    error: null,
   };
 
   const [state, dispatch] = useReducer(streamState, initialState);
-  const { done, buffer, refreshCount } = state;
+  const { done, buffer, refreshCount, error } = state;
 
   const streamChunks = useCallback(
     async (
@@ -89,10 +90,8 @@ export const useBuffer: BufferHook = ({
             () => streamChunks(stream, throttle)
           );
         } catch (error) {
-          if (error instanceof DOMException && error.name === "AbortError") {
-            // The stream was cancelled.
-          } else {
-            throw error;
+          if (error instanceof Error) {
+            dispatch({ type: "setError", payload: error });
           }
         }
       })();
@@ -101,7 +100,6 @@ export const useBuffer: BufferHook = ({
         newController.abort();
         cancelAnimationFrame(animation);
       };
-
     },
     [refreshCount, url, throttle, streamChunks, method, data]
   );
@@ -109,6 +107,7 @@ export const useBuffer: BufferHook = ({
   return {
     buffer,
     done,
+    error,
     refresh: () => dispatch({ type: "refresh" }),
     cancel: () => dispatch({ type: "cancel" }),
   };
