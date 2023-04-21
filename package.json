@@ -64,5 +64,5 @@
     "gpt-3"
   ],
   "description": "Hooks and components for working with OpenAI streams.",
-  "homepage": "https://github.com/gptlabs/nextjs-openai"
+  "homepage": "https://github.com/SpellcraftAI/nextjs-openai"
 }

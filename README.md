@@ -1,6 +1,6 @@
 # OpenAI for Next.js
 
-[**Github**](https://github.com/gptlabs/nextjs-openai) |
+[**Github**](https://github.com/SpellcraftAI/nextjs-openai) |
 [**NPM**](https://npmjs.com/package/nextjs-openai) |
 [**Demo**](https://nextjs-openai.vercel.app) |
 [**Docs**](https://nextjs-openai.vercel.app/docs)
@@ -8,7 +8,7 @@
 Adds hooks and components for working with OpenAI streams.
 
 <img width="600"
-src="https://github.com/gptlabs/nextjs-openai/raw/master/public/nextjs-openai-demo.gif">
+src="https://github.com/SpellcraftAI/nextjs-openai/raw/master/public/nextjs-openai-demo.gif">
 
 ### Installation
 
@@ -73,7 +73,7 @@ set the `{ method, data }` options.
 set `{ method = "GET" }` and manually set the URL search params on `{ url }`.
 
 <sub>See
-[`src/pages/index.tsx`](https://github.com/gptlabs/nextjs-openai/blob/master/src/pages/index.tsx)
+[`src/pages/index.tsx`](https://github.com/SpellcraftAI/nextjs-openai/blob/master/src/pages/index.tsx)
 for a live example.</sub>
 
 #### With `<StreamingTextURL>`
