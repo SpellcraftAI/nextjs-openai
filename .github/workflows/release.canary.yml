@@ -18,9 +18,7 @@ jobs:
           # "lts/*"
         ]
         os: [
-          ubuntu-latest, 
-          windows-latest, 
-          macos-latest
+          ubuntu-latest
         ]
 
     steps:
@@ -55,6 +53,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
 
     - name: Test Production Bundle & Release
-      run: pnpm release-it minor --preRelease=canary --ci -VV
+      run: pnpm release-it patch --preRelease=canary --ci -VV
       env:
         GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
