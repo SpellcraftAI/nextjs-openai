@@ -64,7 +64,16 @@ export const useBuffer: BufferHook = ({
       const newController = new AbortController();
       dispatch({ type: "setController", payload: newController });
 
+      /**
+       * The DOM animation to update the buffer.
+       */
       let animation: number;
+      /**
+       * Used to cancel the fetch request, needed for React 18 double render in
+       * dev mode.
+       */
+      let shouldCancel = false;
+
       (async () => {
         try {
           const { method = "POST" } = optionsRef.current;
@@ -95,9 +104,11 @@ export const useBuffer: BufferHook = ({
           }
 
           const stream = yieldStream(response.body, newController);
-          animation = requestAnimationFrame(
-            () => streamChunks(stream, throttle)
-          );
+          if (!shouldCancel) {
+            animation = requestAnimationFrame(
+              () => streamChunks(stream, throttle)
+            );
+          }
         } catch (error) {
           if (error instanceof Error) {
             const { name, message } = error;
@@ -107,10 +118,13 @@ export const useBuffer: BufferHook = ({
       })().catch();
 
       return () => {
+        shouldCancel = true;
         cancelAnimationFrame(animation);
+
         if (newController) {
           newController.abort();
           dispatch({ type: "cancel" });
+          dispatch({ type: "reset" });
         }
       };
     },

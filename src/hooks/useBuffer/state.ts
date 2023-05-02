@@ -12,13 +12,20 @@ export type State = {
 export type Action =
   | { type: "cancel" }
   | { type: "refresh" }
-  | { type: "add"; payload: Uint8Array }
   | { type: "done" }
+  | { type: "reset" }
+  | { type: "add"; payload: Uint8Array }
   | { type: "setError"; payload: SerializedError }
   | { type: "setController"; payload: AbortController };
 
 export const streamState = (prevState: State, action: Action) => {
   switch (action.type) {
+    case "reset":
+      return {
+        ...prevState,
+        buffer: [],
+      };
+
     case "cancel":
       prevState.controller?.abort();
       return {
