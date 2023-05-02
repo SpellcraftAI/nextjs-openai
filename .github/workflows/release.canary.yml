@@ -27,7 +27,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: recursive
-        token: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Use PNPM
       uses: pnpm/action-setup@v2
@@ -50,9 +50,9 @@ jobs:
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
       env:
-        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Test Production Bundle & Release
       run: npx release-it --preRelease=canary --ci -VV
       env:
-        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
