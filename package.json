@@ -23,7 +23,7 @@
     "pretest": "tsmodule build",
     "test": "ava",
     "prepublishOnly": "pnpm export && pnpm test",
-    "canary": "pnpm build && npm version --prerelease --preid=canary && pnpm publish --tag canary"
+    "canary": "pnpm build && npm version prerelease --preid canary && pnpm publish --tag canary"
   },
   "devDependencies": {
     "@tsmodule/react": "^12.0.0",
