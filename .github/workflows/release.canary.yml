@@ -1,9 +1,6 @@
 name: Release (canary)
 
-on:
-  push:
-    branches:
-      - 'canary'
+on: workflow_dispatch
 
 jobs:
   Release:
