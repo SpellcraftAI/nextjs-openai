@@ -26,7 +26,6 @@ jobs:
     - name: Use Git checkout with submodules
       uses: actions/checkout@v3
       with:
-        persist-credentials: false
         submodules: recursive
         token: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
 
