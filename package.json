@@ -1,6 +1,6 @@
 {
   "name": "nextjs-openai",
-  "version": "6.6.3-canary.0",
+  "version": "6.6.3-canary.1",
   "license": "MIT",
   "type": "module",
   "files": [
