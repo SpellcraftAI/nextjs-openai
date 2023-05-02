@@ -1,15 +1,20 @@
 name: Release (canary)
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
+
     branches:
-      - 'master'
+      - canary
 
 jobs:
   Release:
+    if: github.event.pull_request.merged == true
+    
     name: Node.js v${{ matrix.nodejs }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     strategy:
       matrix:
