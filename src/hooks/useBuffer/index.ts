@@ -123,8 +123,10 @@ export const useBuffer: BufferHook = ({
 
         if (newController) {
           newController.abort();
+
           dispatch({ type: "cancel" });
           dispatch({ type: "reset" });
+          dispatch({ type: "setError", payload: null });
         }
       };
     },

@@ -15,7 +15,7 @@ export type Action =
   | { type: "done" }
   | { type: "reset" }
   | { type: "add"; payload: Uint8Array }
-  | { type: "setError"; payload: SerializedError }
+  | { type: "setError"; payload: SerializedError | null }
   | { type: "setController"; payload: AbortController };
 
 export const streamState = (prevState: State, action: Action) => {
