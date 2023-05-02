@@ -1,0 +1,59 @@
+name: Release (production)
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  Release:
+    name: Node ${{ matrix.nodejs }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        nodejs: [
+          18, 
+          # 16, 
+          # "lts/*"
+        ]
+        os: [
+          ubuntu-latest
+        ]
+
+    steps:
+
+    - name: Use Git checkout with submodules
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+
+    - name: Use PNPM
+      uses: pnpm/action-setup@v2
+      with:
+        version: latest
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        cache: pnpm
+        node-version: ${{ matrix.node-version }}
+
+    - name: Authenticate with private NPM package
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+    - name: Install
+      run: pnpm i
+
+    - name: Configure Git
+      run: |
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      env:
+        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+
+    - name: Test Production Bundle & Release
+      run: pnpm release-it minor --ci -VV
+      env:
+        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
