@@ -7,21 +7,30 @@ on:
 
 jobs:
   Release:
-    name: Node ${{ matrix.nodejs }} on ${{ matrix.os }}
+    name: Node.js v${{ matrix.nodejs }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 5
+
     strategy:
       matrix:
-        nodejs: [
-          18, 
-          # 16, 
-          # "lts/*"
-        ]
-        os: [
-          ubuntu-latest
-        ]
+        nodejs: [16]
+        os: [ubuntu-latest]
 
     steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.nodejs }}
+
+    - name: Authenticate with private NPM package
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+    - name: git config
+      run: |
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      env:
+        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
 
     - name: Use Git checkout with submodules
       uses: actions/checkout@v3
@@ -39,10 +48,7 @@ jobs:
       with:
         cache: pnpm
         node-version: ${{ matrix.node-version }}
-
-    - name: Authenticate with private NPM package
-      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
+    
     - name: Install
       run: pnpm i
 
@@ -54,6 +60,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
 
     - name: Test Production Bundle & Release
-      run: pnpm release-it minor --ci -VV
+      run: npx release-it minor --ci -VV
       env:
         GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
