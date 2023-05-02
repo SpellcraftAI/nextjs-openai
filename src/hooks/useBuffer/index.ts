@@ -68,11 +68,6 @@ export const useBuffer: BufferHook = ({
        * The DOM animation to update the buffer.
        */
       let animation: number;
-      /**
-       * Used to cancel the fetch request, needed for React 18 double render in
-       * dev mode.
-       */
-      let shouldCancel = false;
 
       (async () => {
         try {
@@ -104,21 +99,18 @@ export const useBuffer: BufferHook = ({
           }
 
           const stream = yieldStream(response.body, newController);
-          if (!shouldCancel) {
-            animation = requestAnimationFrame(
-              () => streamChunks(stream, throttle)
-            );
-          }
+          animation = requestAnimationFrame(
+            () => streamChunks(stream, throttle)
+          );
         } catch (error) {
           if (error instanceof Error) {
             const { name, message } = error;
             dispatch({ type: "setError", payload: { name, message } });
           }
         }
-      })().catch();
+      })();
 
       return () => {
-        shouldCancel = true;
         cancelAnimationFrame(animation);
 
         if (newController) {

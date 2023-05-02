@@ -60,7 +60,7 @@ export const streamState = (prevState: State, action: Action) => {
     case "setError":
       return {
         ...prevState,
-        done: true,
+        done: Boolean(action.payload),
         error: action.payload,
       };
 
