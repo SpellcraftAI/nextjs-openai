@@ -29,8 +29,10 @@ export const useBuffer: BufferHook = ({
     error: null,
   };
 
-  const [state, dispatch] = useReducer(streamState, initialState);
   const optionsRef = useRef(options);
+  const mountedRef = useRef(false);
+
+  const [state, dispatch] = useReducer(streamState, initialState);
   const { done, buffer, refreshCount, error } = state;
 
   const streamChunks = useCallback(
@@ -103,23 +105,22 @@ export const useBuffer: BufferHook = ({
             () => streamChunks(stream, throttle)
           );
         } catch (error) {
-          if (error instanceof Error) {
-            const { name, message } = error;
-            dispatch({ type: "setError", payload: { name, message } });
+          if (mountedRef.current) {
+            if (error instanceof Error) {
+              const { name, message } = error;
+              dispatch({ type: "setError", payload: { name, message } });
+            }
           }
         }
       })();
 
       return () => {
+        mountedRef.current = false;
         cancelAnimationFrame(animation);
 
-        if (newController) {
-          newController.abort();
-
-          dispatch({ type: "cancel" });
-          dispatch({ type: "reset" });
-          dispatch({ type: "setError", payload: null });
-        }
+        dispatch({ type: "cancel" });
+        dispatch({ type: "reset" });
+        dispatch({ type: "setError", payload: null });
       };
     },
     [refreshCount, url, throttle, streamChunks, data]
