@@ -10,8 +10,10 @@ export default function Home() {
   const { buffer, done, refresh, cancel } = useTextBuffer({
     url: "/api/completion",
     throttle: 100,
-    method: "POST",
     data,
+    options: {
+      method: "POST"
+    }
   });
 
   // eslint-disable-next-line no-console

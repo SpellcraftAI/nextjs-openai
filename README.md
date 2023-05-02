@@ -32,7 +32,9 @@ data (and text) from a given URL.
 import { useTextBuffer } from "nextjs-openai";
 
 export default function Demo() {
-  const { buffer, refresh, cancel, done } = useTextBuffer({ url: "/api/demo" });
+  const { buffer, refresh, cancel, done } = useTextBuffer({ 
+    url: "/api/demo"
+  });
   
   return (
     <div>
@@ -101,6 +103,14 @@ export default function Home() {
     url: "/api/demo",
     throttle: 100,
     data,
+    /**
+     * Optional: Override params for `fetch(url, params)`.
+     */
+    options: {
+      headers: {
+        // ...
+      }
+    }
   });
   // ...
   return (

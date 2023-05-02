@@ -2893,10 +2893,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openai-streams@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/openai-streams/-/openai-streams-5.0.0.tgz#b1d90cbfcc34bda550f99605a0452943e8478ee5"
-  integrity sha512-IJL5dklgXu3m8rSNhBYrJxOXMtZrOdXBxowHsIMjMDLsfO+vvByOwOwwHF89M3bsuJdfV4L8LuazdXldD3fYOg==
+openai-streams@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/openai-streams/-/openai-streams-5.1.1.tgz#4dad8ba04fe127e4bad3b33b030d7700f744dd34"
+  integrity sha512-xLy6K+Uehl9L8VPG7PjB+KaBLU6aiKI/X11Ap7asMvKgKuDPUUShlqVv2XMM3StQcJ8PAKl+KUbTCFAYiSBtMg==
   dependencies:
     dotenv "^16.0.3"
     eventsource-parser "^0.1.0"

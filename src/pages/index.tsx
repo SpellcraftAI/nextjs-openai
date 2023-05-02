@@ -10,7 +10,9 @@ export default function Home() {
   const { buffer, done, error, refresh, cancel } = useTextBuffer({
     url: "/api/chat",
     throttle: 100,
-    method: "POST",
+    options: {
+      method: "POST",
+    },
     data,
   });
 

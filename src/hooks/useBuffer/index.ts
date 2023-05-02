@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { yieldStream } from "yield-stream";
 import { BufferHook } from "../types";
 import { State, streamState } from "./state";
@@ -17,9 +17,8 @@ import { State, streamState } from "./state";
 export const useBuffer: BufferHook = ({
   url,
   throttle = 0,
-  method = "POST",
   data = null,
-  ...props
+  options = {}
 }) => {
   const initialState: State = {
     done: false,
@@ -31,6 +30,7 @@ export const useBuffer: BufferHook = ({
   };
 
   const [state, dispatch] = useReducer(streamState, initialState);
+  const optionsRef = useRef(options);
   const { done, buffer, refreshCount, error } = state;
 
   const streamChunks = useCallback(
@@ -67,17 +67,19 @@ export const useBuffer: BufferHook = ({
       let animation: number;
       (async () => {
         try {
+          const { method = "POST" } = optionsRef.current;
           const { signal } = newController;
+
           const response = await fetch(
             url,
             {
               signal,
               method,
               body:
-                method === "POST" && data
-                  ? JSON.stringify(data)
-                  : undefined,
-              ...props,
+              method === "POST" && data
+                ? JSON.stringify(data)
+                : undefined,
+              ...optionsRef?.current,
             }
           );
 
@@ -106,9 +108,13 @@ export const useBuffer: BufferHook = ({
 
       return () => {
         cancelAnimationFrame(animation);
+        if (newController) {
+          newController.abort();
+          dispatch({ type: "cancel" });
+        }
       };
     },
-    [refreshCount, url, throttle, streamChunks, method, data]
+    [refreshCount, url, throttle, streamChunks, data]
   );
 
   return {

@@ -9,8 +9,7 @@
  */
 
 import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
-import { useTextBuffer } from "../../hooks";
-import { FetchBufferOptions } from "../../hooks/types";
+import { BufferConfig, useTextBuffer } from "../../hooks";
 
 export interface StreamingTextProps extends HTMLAttributes<HTMLElement> {
   /**
@@ -115,7 +114,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
   );
 };
 
-export type StreamingTextURLProps = Omit<StreamingTextProps, "buffer"> & FetchBufferOptions;
+export type StreamingTextURLProps = Omit<StreamingTextProps, "buffer"> & BufferConfig;
 
 /**
  * Wrapper around `<StreamingText>` that fetches the text stream from a URL.
@@ -139,10 +138,10 @@ export const StreamingTextURL: FC<StreamingTextURLProps> = ({
   url,
   throttle,
   data,
-  method,
+  options,
   ...props
 }) => {
-  const { buffer } = useTextBuffer({ url, throttle, data, method });
+  const { buffer } = useTextBuffer({ url, throttle, data, options });
   return (
     <StreamingText
       buffer={buffer}
