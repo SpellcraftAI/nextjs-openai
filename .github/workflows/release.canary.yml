@@ -53,6 +53,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
 
     - name: Test Production Bundle & Release
-      run: pnpm release-it patch --preRelease=canary --ci -VV
+      run: npx release-it --preRelease=canary --ci -VV
       env:
         GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
