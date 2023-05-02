@@ -14,7 +14,7 @@ jobs:
     
     name: Node.js v${{ matrix.nodejs }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     strategy:
       matrix:
