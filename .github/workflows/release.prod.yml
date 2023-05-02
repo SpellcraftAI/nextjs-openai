@@ -1,12 +1,17 @@
 name: Release (production)
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
+
     branches:
-      - 'master'
+      - master
 
 jobs:
   Release:
+    if: github.event.pull_request.merged == true
+
     name: Node.js v${{ matrix.nodejs }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
