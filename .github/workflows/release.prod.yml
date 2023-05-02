@@ -26,8 +26,9 @@ jobs:
     - name: Use Git checkout with submodules
       uses: actions/checkout@v3
       with:
+        persist-credentials: false
         submodules: recursive
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
 
     - name: Use PNPM
       uses: pnpm/action-setup@v2
@@ -37,6 +38,7 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
+        cache: pnpm
         node-version: ${{ matrix.node-version }}
 
     - name: Authenticate with private NPM package
@@ -50,9 +52,9 @@ jobs:
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+
     - name: Test Production Bundle & Release
       run: pnpm release-it minor --ci -VV
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
