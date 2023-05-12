@@ -1,12 +1,20 @@
 name: CI
 
+env:
+  GITHUB_TOKEN: ${{ secrets.OVERRIDE_GITHUB_TOKEN }}
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 on:
+  push:
+    branches:
+      - master
+      - canary
   pull_request:
     branches:
       - '**'
 
 jobs:
-  test:
+  Test:
     name: Node ${{ matrix.nodejs }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 10
@@ -24,6 +32,9 @@ jobs:
         ]
     steps:
 
+    # - name: Authenticate with private NPM package
+    #   run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+    
     - name: Use Git checkout with submodules
       uses: actions/checkout@v3
       with:
