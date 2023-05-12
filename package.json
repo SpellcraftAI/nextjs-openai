@@ -65,5 +65,15 @@
     "gpt-3"
   ],
   "description": "Hooks and components for working with OpenAI streams.",
-  "homepage": "https://github.com/SpellcraftAI/nextjs-openai"
+  "homepage": "https://github.com/SpellcraftAI/nextjs-openai",
+  "release-it": {
+    "git": {
+      "commitMessage": "release: v${version}",
+      "tagAnnotation": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "releaseName": "v${version}"
+    }
+  }
 }
