@@ -1,6 +1,6 @@
 {
   "name": "nextjs-openai",
-  "version": "6.10.0",
+  "version": "7.0.0",
   "license": "MIT",
   "type": "module",
   "files": [
