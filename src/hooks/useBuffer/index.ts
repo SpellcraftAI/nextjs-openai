@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { yieldStream } from "yield-stream";
 import { BufferHook } from "../types";
 import { State, streamState } from "./state";
@@ -30,10 +30,19 @@ export const useBuffer: BufferHook = ({
   };
 
   const optionsRef = useRef(options);
-  const mountedRef = useRef(false);
+  const [mounted, setMounted] = useState(false);
 
   const [state, dispatch] = useReducer(streamState, initialState);
   const { done, buffer, refreshCount, error } = state;
+
+  useEffect(
+    () => {
+      if (!mounted) {
+        setMounted(true);
+      }
+    },
+    [mounted],
+  );
 
   const streamChunks = useCallback(
     async (
@@ -63,6 +72,10 @@ export const useBuffer: BufferHook = ({
    */
   useEffect(
     () => {
+      if (!mounted) {
+        return;
+      }
+
       const newController = new AbortController();
       dispatch({ type: "setController", payload: newController });
 
@@ -105,17 +118,16 @@ export const useBuffer: BufferHook = ({
             () => streamChunks(stream, throttle)
           );
         } catch (error) {
-          if (mountedRef.current) {
-            if (error instanceof Error) {
-              const { name, message } = error;
-              dispatch({ type: "setError", payload: { name, message } });
-            }
+          if (error instanceof Error) {
+            const { name, message } = error;
+            dispatch({ type: "setError", payload: { name, message } });
+          } else {
+            dispatch({ type: "setError", payload: { name: "Error", message: JSON.stringify(error) } });
           }
         }
       })();
 
       return () => {
-        mountedRef.current = false;
         cancelAnimationFrame(animation);
 
         dispatch({ type: "cancel" });
@@ -123,7 +135,7 @@ export const useBuffer: BufferHook = ({
         dispatch({ type: "setError", payload: null });
       };
     },
-    [refreshCount, url, throttle, streamChunks, data]
+    [refreshCount, url, throttle, streamChunks, data, mounted]
   );
 
   return {

@@ -3,6 +3,7 @@ import { OpenAI } from "openai-streams";
 
 export default async function demo(req: NextRequest) {
   // return new Response("Testing error.", { status: 401 });
+  // throw new Error("test");
 
   const { name } = await req.json();
   if (!name) {
